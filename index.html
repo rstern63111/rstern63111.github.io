@@ -82,6 +82,26 @@
             margin-bottom: 1rem;
         }
 
+        .feature-list {
+            list-style-type: none;
+            padding-left: 0;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-list li {
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .feature-list li:before {
+            content: "•";
+            color: var(--secondary-color);
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
         .project-link {
             display: inline-block;
             padding: 8px 16px;
@@ -94,6 +114,16 @@
 
         .project-link:hover {
             background-color: #2980b9;
+        }
+
+        .project-status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            background-color: #f1c40f;
+            color: #34495e;
         }
 
         .about-section {
@@ -124,30 +154,51 @@
         <section class="about-section">
             <h2>About</h2>
             <p>Welcome to my project portfolio! Here you'll find a collection of my work and ongoing projects. 
-               Each project represents a different challenge and learning opportunity.</p>
+               I specialize in creating interactive tools and applications, with a focus on tax-related solutions and interactive experiences.</p>
         </section>
 
         <section class="projects">
             <h2>Projects</h2>
             <div class="projects-grid">
-                <!-- Example Project Card - You can duplicate this for each project -->
+                <!-- Tax Expert AI Widget -->
                 <div class="project-card">
                     <h3>Tax Expert AI Widget</h3>
-                    <p>An interactive widget designed to assist with tax-related queries and calculations. 
-                       Features include multi-tab interface, calculator, and form finder.</p>
+                    <div class="project-status">In Development</div>
+                    <p>An advanced interactive widget designed to revolutionize tax assistance and calculations.</p>
+                    <h4>Key Features:</h4>
+                    <ul class="feature-list">
+                        <li>Multi-tab interface (Chat, Calculator, Form Finder)</li>
+                        <li>State and tax year context management</li>
+                        <li>Security badges and data protection</li>
+                        <li>Progress tracking visualization</li>
+                        <li>Form search and preview capability</li>
+                        <li>Enhanced response formatting</li>
+                    </ul>
+                    <p><strong>Tech Stack:</strong> HTML, CSS, JavaScript</p>
+                    <a href="/tax-expert-widget" class="project-link">View Project</a>
+                </div>
+
+                <!-- Interactive Game -->
+                <div class="project-card">
+                    <h3>Interactive Game Project</h3>
+                    <div class="project-status">In Planning</div>
+                    <p>An engaging interactive game being developed as part of my learning journey.</p>
+                    <h4>Planned Features:</h4>
+                    <ul class="feature-list">
+                        <li>Interactive gameplay mechanics</li>
+                        <li>User-friendly interface</li>
+                        <li>Score tracking system</li>
+                        <li>Progressive difficulty levels</li>
+                    </ul>
+                    <p><strong>Tech Stack:</strong> To be determined</p>
                     <a href="#" class="project-link">Coming Soon</a>
                 </div>
 
-                <!-- Add more project cards as you create them -->
+                <!-- Future Project Card -->
                 <div class="project-card">
                     <h3>Future Project</h3>
-                    <p>This space is reserved for an upcoming project. Stay tuned for updates!</p>
-                    <a href="#" class="project-link">Coming Soon</a>
-                </div>
-
-                <div class="project-card">
-                    <h3>Future Project</h3>
-                    <p>Another space reserved for an upcoming project. More details to come!</p>
+                    <div class="project-status">Planning</div>
+                    <p>More exciting projects coming soon! Stay tuned for updates.</p>
                     <a href="#" class="project-link">Coming Soon</a>
                 </div>
             </div>
