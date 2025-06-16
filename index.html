@@ -1,33 +1,161 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Welcome to My GitHub Page</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rob Stern - Project Portfolio</title>
     <style>
+        /* Modern, clean styling */
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --background-color: #f5f6fa;
+            --text-color: #2c3e50;
+            --card-background: white;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             line-height: 1.6;
             margin: 0;
-            padding: 20px;
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: #f0f0f0;
+            padding: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
         }
-        h1 {
-            color: #2c3e50;
-        }
+
         .container {
-            background-color: white;
+            max-width: 1200px;
+            margin: 0 auto;
             padding: 20px;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+
+        .subtitle {
+            color: #ecf0f1;
+            font-size: 1.2rem;
+            margin-top: 0.5rem;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 20px 0;
+        }
+
+        .project-card {
+            background: var(--card-background);
             border-radius: 8px;
+            padding: 20px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .project-card h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+
+        .project-card p {
+            margin-bottom: 1rem;
+        }
+
+        .project-link {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: var(--secondary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        .project-link:hover {
+            background-color: #2980b9;
+        }
+
+        .about-section {
+            background: var(--card-background);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 2rem;
+            border-top: 1px solid #eee;
         }
     </style>
 </head>
 <body>
+    <header>
+        <div class="header-content">
+            <h1>Rob Stern</h1>
+            <div class="subtitle">Project Portfolio</div>
+        </div>
+    </header>
+
     <div class="container">
-        <h1>Welcome to My GitHub Page</h1>
-        <p>This is my first GitHub Pages website!</p>
-        <p>I'm learning how to use GitHub and create web content.</p>
+        <section class="about-section">
+            <h2>About</h2>
+            <p>Welcome to my project portfolio! Here you'll find a collection of my work and ongoing projects. 
+               Each project represents a different challenge and learning opportunity.</p>
+        </section>
+
+        <section class="projects">
+            <h2>Projects</h2>
+            <div class="projects-grid">
+                <!-- Example Project Card - You can duplicate this for each project -->
+                <div class="project-card">
+                    <h3>Tax Expert AI Widget</h3>
+                    <p>An interactive widget designed to assist with tax-related queries and calculations. 
+                       Features include multi-tab interface, calculator, and form finder.</p>
+                    <a href="#" class="project-link">Coming Soon</a>
+                </div>
+
+                <!-- Add more project cards as you create them -->
+                <div class="project-card">
+                    <h3>Future Project</h3>
+                    <p>This space is reserved for an upcoming project. Stay tuned for updates!</p>
+                    <a href="#" class="project-link">Coming Soon</a>
+                </div>
+
+                <div class="project-card">
+                    <h3>Future Project</h3>
+                    <p>Another space reserved for an upcoming project. More details to come!</p>
+                    <a href="#" class="project-link">Coming Soon</a>
+                </div>
+            </div>
+        </section>
     </div>
+
+    <footer>
+        <p>© 2024 Rob Stern. All rights reserved.</p>
+    </footer>
 </body>
 </html>
