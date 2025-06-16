@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tax Quest</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles/client-management.css">
+    <link rel="stylesheet" href="styles/staff-management.css">
+    <style>
+        :root {
+            --color-primary: #3498db;
+            --color-secondary: #2ecc71;
+            --color-accent: #e74c3c;
+            --color-warning: #f1c40f;
+            --color-text: #ecf0f1;
+            --color-background: #1a1a2e;
+            --color-surface: #2c3e50;
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.2);
+            --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.3);
+            --transition-fast: 0.2s ease;
+            --transition-normal: 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--color-background);
+            color: var(--color-text);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        #gameContainer {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .game-header {
+            text-align: center;
+            padding: 20px;
+            background: var(--color-surface);
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .game-header h1 {
+            font-family: 'Press Start 2P', cursive;
+            color: var(--color-primary);
+            font-size: 32px;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+        }
+
+        .game-nav {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .nav-button {
+            padding: 10px 20px;
+            border: none;
+            background: var(--color-primary);
+            color: var(--color-text);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .nav-button:hover {
+            background: var(--color-secondary);
+            transform: translateY(-2px);
+        }
+
+        .game-content {
+            flex: 1;
+            background: var(--color-surface);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .quick-actions {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-button {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            background: var(--color-primary);
+            color: var(--color-text);
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .action-button:hover {
+            background: var(--color-secondary);
+            transform: translateY(-5px);
+        }
+
+        [data-tooltip] {
+            position: relative;
+        }
+
+        [data-tooltip]:before {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 5px 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: all var(--transition-normal);
+        }
+
+        [data-tooltip]:hover:before {
+            opacity: 1;
+            transform: translateX(-50%) translateY(-5px);
+        }
+
+        .notification-center {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .notification {
+            background: var(--color-surface);
+            padding: 15px;
+            border-radius: 8px;
+            min-width: 300px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideIn 0.3s ease;
+            box-shadow: var(--shadow-md);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .game-header h1 {
+                font-size: 24px;
+            }
+
+            .nav-button {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+
+            .quick-actions {
+                bottom: 10px;
+                right: 10px;
+            }
+
+            .action-button {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <div class="game-header">
+            <h1>Tax Quest</h1>
+            <div class="game-nav">
+                <button class="nav-button" onclick="game.showOffice()">Office</button>
+                <button class="nav-button" onclick="game.showStaffPanel()">Staff</button>
+                <button class="nav-button" onclick="game.showClientPanel()">Clients</button>
+            </div>
+        </div>
+
+        <div id="mainContent" class="game-content">
+            <!-- Content will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <div class="quick-actions">
+        <button class="action-button" onclick="game.showClientPanel()" data-tooltip="Clients">
+            <i class="fas fa-users"></i>
+        </button>
+        <button class="action-button" onclick="game.showStaffPanel()" data-tooltip="Staff">
+            <i class="fas fa-user-tie"></i>
+        </button>
+        <button class="action-button" onclick="game.showAppointments()" data-tooltip="Appointments">
+            <i class="fas fa-calendar"></i>
+        </button>
+    </div>
+
+    <div class="notification-center" id="notificationCenter"></div>
+
+    <script type="module">
+        import { ClientManagementSystem } from './src/systems/ClientManagementSystem.js';
+        import { StaffManagementSystem } from './src/systems/StaffManagementSystem.js';
+
+        class TaxQuest {
+            constructor() {
+                this.staffSystem = new StaffManagementSystem();
+                this.clientSystem = new ClientManagementSystem();
+            }
+
+            initialize() {
+                this.staffSystem.initialize();
+                this.clientSystem.initialize();
+                this.showOffice();
+            }
+
+            showOffice() {
+                const content = document.getElementById('mainContent');
+                content.innerHTML = `
+                    <div style="padding: 20px; text-align: center;">
+                        <h2>Welcome to Your Tax Office</h2>
+                        <p>Use the navigation buttons to manage your staff and clients.</p>
+                    </div>
+                `;
+            }
+
+            showStaffPanel() {
+                const content = document.getElementById('mainContent');
+                content.innerHTML = '';
+                content.appendChild(this.staffSystem.createStaffUI());
+            }
+
+            showClientPanel() {
+                const content = document.getElementById('mainContent');
+                content.innerHTML = '';
+                content.appendChild(this.clientSystem.createClientUI());
+            }
+
+            showAppointments() {
+                const content = document.getElementById('mainContent');
+                content.innerHTML = `
+                    <div style="padding: 20px;">
+                        <h2>Appointments</h2>
+                        <p>Appointment management coming soon!</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Create global game instance
+        window.game = new TaxQuest();
+        game.initialize();
+    </script>
+</body>
+</html>
