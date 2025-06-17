@@ -2,10 +2,11 @@
 <html>
 <head>
     <title>Tax Quest</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="styles/client-management.css">
-    <link rel="stylesheet" href="styles/staff-management.css">
+    <!-- Base styles -->
     <style>
         :root {
             --color-primary: #3498db;
@@ -15,71 +16,55 @@
             --color-text: #ecf0f1;
             --color-background: #1a1a2e;
             --color-surface: #2c3e50;
-            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
-            --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.2);
-            --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.3);
-            --transition-fast: 0.2s ease;
-            --transition-normal: 0.3s ease;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
         }
 
         body {
+            margin: 0;
+            padding: 0;
             background: var(--color-background);
             color: var(--color-text);
             font-family: 'Inter', sans-serif;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            overflow-x: hidden;
         }
 
-        #gameContainer {
-            max-width: 1400px;
+        #game-container {
+            max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
             flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
         }
 
         .game-header {
             text-align: center;
-            padding: 20px;
-            background: var(--color-surface);
-            border-radius: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
 
-        .game-header h1 {
+        .game-title {
             font-family: 'Press Start 2P', cursive;
             color: var(--color-primary);
-            font-size: 32px;
-            margin-bottom: 15px;
+            font-size: 2.5em;
+            margin-bottom: 20px;
             text-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
         }
 
-        .game-nav {
+        .nav-buttons {
             display: flex;
             justify-content: center;
-            gap: 10px;
-            margin-top: 20px;
+            gap: 15px;
+            margin-bottom: 30px;
         }
 
         .nav-button {
-            padding: 10px 20px;
-            border: none;
             background: var(--color-primary);
             color: var(--color-text);
+            border: none;
+            padding: 12px 24px;
             border-radius: 8px;
+            font-size: 16px;
             cursor: pointer;
-            transition: all var(--transition-normal);
-            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
         }
 
         .nav-button:hover {
@@ -88,18 +73,106 @@
         }
 
         .game-content {
-            flex: 1;
             background: var(--color-surface);
             border-radius: 10px;
-            overflow: hidden;
-            position: relative;
+            padding: 20px;
+            min-height: 500px;
         }
 
+        /* Character Selection Styles */
+        .character-selection {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .character-card {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .character-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .character-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: var(--color-primary);
+        }
+
+        .character-stats {
+            margin-top: 15px;
+        }
+
+        .stat-bar {
+            background: rgba(0, 0, 0, 0.3);
+            height: 8px;
+            border-radius: 4px;
+            margin: 8px 0;
+            overflow: hidden;
+        }
+
+        .stat-fill {
+            height: 100%;
+            background: var(--color-primary);
+            transition: width 0.3s ease;
+        }
+
+        /* Office View Styles */
+        .office-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+            padding: 20px;
+        }
+
+        .office-cell {
+            aspect-ratio: 1;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .office-cell:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Status Bar */
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-icon {
+            font-size: 24px;
+            color: var(--color-primary);
+        }
+
+        /* Quick Actions */
         .quick-actions {
             position: fixed;
             bottom: 20px;
             right: 20px;
             display: flex;
+            flex-direction: column;
             gap: 10px;
         }
 
@@ -107,84 +180,26 @@
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            border: none;
             background: var(--color-primary);
             color: var(--color-text);
+            border: none;
+            font-size: 20px;
             cursor: pointer;
-            transition: all var(--transition-normal);
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
         }
 
         .action-button:hover {
             background: var(--color-secondary);
-            transform: translateY(-5px);
+            transform: translateY(-2px);
         }
 
-        [data-tooltip] {
-            position: relative;
-        }
-
-        [data-tooltip]:before {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 5px 10px;
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            border-radius: 4px;
-            font-size: 12px;
-            white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            transition: all var(--transition-normal);
-        }
-
-        [data-tooltip]:hover:before {
-            opacity: 1;
-            transform: translateX(-50%) translateY(-5px);
-        }
-
-        .notification-center {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            z-index: 1000;
-        }
-
-        .notification {
-            background: var(--color-surface);
-            padding: 15px;
-            border-radius: 8px;
-            min-width: 300px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            animation: slideIn 0.3s ease;
-            box-shadow: var(--shadow-md);
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
+        /* Responsive Design */
         @media (max-width: 768px) {
-            .game-header h1 {
-                font-size: 24px;
+            .game-title {
+                font-size: 1.8em;
             }
 
             .nav-button {
@@ -192,101 +207,173 @@
                 font-size: 14px;
             }
 
-            .quick-actions {
-                bottom: 10px;
-                right: 10px;
-            }
-
-            .action-button {
-                width: 40px;
-                height: 40px;
-                font-size: 16px;
+            .character-selection {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
-    <div id="gameContainer">
+    <div id="game-container">
         <div class="game-header">
-            <h1>Tax Quest</h1>
-            <div class="game-nav">
+            <h1 class="game-title">Tax Quest</h1>
+            <div class="nav-buttons">
+                <button class="nav-button" onclick="game.startNewGame()">New Game</button>
                 <button class="nav-button" onclick="game.showOffice()">Office</button>
-                <button class="nav-button" onclick="game.showStaffPanel()">Staff</button>
-                <button class="nav-button" onclick="game.showClientPanel()">Clients</button>
+                <button class="nav-button" onclick="game.showStaff()">Staff</button>
+                <button class="nav-button" onclick="game.showClients()">Clients</button>
             </div>
         </div>
 
-        <div id="mainContent" class="game-content">
-            <!-- Content will be dynamically inserted here -->
+        <div class="status-bar">
+            <div class="status-item">
+                <i class="fas fa-dollar-sign status-icon"></i>
+                <span id="money">$50,000</span>
+            </div>
+            <div class="status-item">
+                <i class="fas fa-star status-icon"></i>
+                <span id="reputation">Level 1</span>
+            </div>
+            <div class="status-item">
+                <i class="fas fa-users status-icon"></i>
+                <span id="clients">0 Clients</span>
+            </div>
+        </div>
+
+        <div id="game-content" class="game-content">
+            <!-- Dynamic content will be loaded here -->
+            <div style="text-align: center; padding: 40px;">
+                <h2>Welcome to Tax Quest!</h2>
+                <p>Choose "New Game" to begin your journey as a tax professional.</p>
+            </div>
         </div>
     </div>
 
     <div class="quick-actions">
-        <button class="action-button" onclick="game.showClientPanel()" data-tooltip="Clients">
-            <i class="fas fa-users"></i>
+        <button class="action-button" onclick="game.showHelp()" title="Help">
+            <i class="fas fa-question"></i>
         </button>
-        <button class="action-button" onclick="game.showStaffPanel()" data-tooltip="Staff">
-            <i class="fas fa-user-tie"></i>
-        </button>
-        <button class="action-button" onclick="game.showAppointments()" data-tooltip="Appointments">
-            <i class="fas fa-calendar"></i>
+        <button class="action-button" onclick="game.showSettings()" title="Settings">
+            <i class="fas fa-cog"></i>
         </button>
     </div>
 
-    <div class="notification-center" id="notificationCenter"></div>
-
-    <script type="module">
-        import { ClientManagementSystem } from './src/systems/ClientManagementSystem.js';
-        import { StaffManagementSystem } from './src/systems/StaffManagementSystem.js';
-
-        class TaxQuest {
-            constructor() {
-                this.staffSystem = new StaffManagementSystem();
-                this.clientSystem = new ClientManagementSystem();
+    <script>
+        // Game state
+        const gameState = {
+            money: 50000,
+            reputation: 1,
+            clients: 0,
+            staff: [],
+            office: {
+                size: 5,
+                cells: Array(25).fill(null)
             }
+        };
 
-            initialize() {
-                this.staffSystem.initialize();
-                this.clientSystem.initialize();
+        // Game controller
+        const game = {
+            startNewGame() {
+                const content = document.getElementById('game-content');
+                content.innerHTML = `
+                    <div class="character-selection">
+                        ${this.createCharacterCard('Basic Filer', 'user-tie', {
+                            accuracy: 70,
+                            speed: 60,
+                            knowledge: 50
+                        })}
+                        ${this.createCharacterCard('Tax Specialist', 'user-graduate', {
+                            accuracy: 80,
+                            speed: 50,
+                            knowledge: 70
+                        })}
+                        ${this.createCharacterCard('CPA Pro', 'user-shield', {
+                            accuracy: 90,
+                            speed: 40,
+                            knowledge: 90
+                        })}
+                    </div>
+                `;
+            },
+
+            createCharacterCard(title, icon, stats) {
+                return `
+                    <div class="character-card" onclick="game.selectCharacter('${title}')">
+                        <div class="character-icon">
+                            <i class="fas fa-${icon}"></i>
+                        </div>
+                        <h3>${title}</h3>
+                        <div class="character-stats">
+                            ${Object.entries(stats).map(([stat, value]) => `
+                                <div class="stat-item">
+                                    <div class="stat-label">${stat.charAt(0).toUpperCase() + stat.slice(1)}</div>
+                                    <div class="stat-bar">
+                                        <div class="stat-fill" style="width: ${value}%"></div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            },
+
+            selectCharacter(character) {
+                alert(`Selected ${character}! Game starting...`);
                 this.showOffice();
-            }
+            },
 
             showOffice() {
-                const content = document.getElementById('mainContent');
+                const content = document.getElementById('game-content');
                 content.innerHTML = `
-                    <div style="padding: 20px; text-align: center;">
-                        <h2>Welcome to Your Tax Office</h2>
-                        <p>Use the navigation buttons to manage your staff and clients.</p>
+                    <div class="office-grid">
+                        ${gameState.office.cells.map((cell, index) => `
+                            <div class="office-cell" onclick="game.placeItem(${index})"></div>
+                        `).join('')}
                     </div>
                 `;
-            }
+            },
 
-            showStaffPanel() {
-                const content = document.getElementById('mainContent');
-                content.innerHTML = '';
-                content.appendChild(this.staffSystem.createStaffUI());
-            }
-
-            showClientPanel() {
-                const content = document.getElementById('mainContent');
-                content.innerHTML = '';
-                content.appendChild(this.clientSystem.createClientUI());
-            }
-
-            showAppointments() {
-                const content = document.getElementById('mainContent');
+            showStaff() {
+                const content = document.getElementById('game-content');
                 content.innerHTML = `
                     <div style="padding: 20px;">
-                        <h2>Appointments</h2>
-                        <p>Appointment management coming soon!</p>
+                        <h2>Staff Management</h2>
+                        <p>Staff management system coming soon!</p>
                     </div>
                 `;
-            }
-        }
+            },
 
-        // Create global game instance
-        window.game = new TaxQuest();
-        game.initialize();
+            showClients() {
+                const content = document.getElementById('game-content');
+                content.innerHTML = `
+                    <div style="padding: 20px;">
+                        <h2>Client Management</h2>
+                        <p>Client management system coming soon!</p>
+                    </div>
+                `;
+            },
+
+            placeItem(index) {
+                alert(`Placing item at position ${index}`);
+            },
+
+            showHelp() {
+                alert('Help system coming soon!');
+            },
+
+            showSettings() {
+                alert('Settings panel coming soon!');
+            },
+
+            updateStatus() {
+                document.getElementById('money').textContent = `$${gameState.money.toLocaleString()}`;
+                document.getElementById('reputation').textContent = `Level ${gameState.reputation}`;
+                document.getElementById('clients').textContent = `${gameState.clients} Clients`;
+            }
+        };
+
+        // Initialize game
+        game.updateStatus();
     </script>
 </body>
 </html>
