@@ -4,14 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rob Stern - Project Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Modern, clean styling */
         :root {
             --primary-color: #2c3e50;
             --secondary-color: #3498db;
+            --accent-color: #e74c3c;
             --background-color: #f5f6fa;
             --text-color: #2c3e50;
             --card-background: white;
+            --section-padding: 2rem;
         }
 
         body {
@@ -42,8 +44,12 @@
             padding: 0 20px;
         }
 
-        h1 {
+        h1, h2, h3 {
             margin: 0;
+            line-height: 1.2;
+        }
+
+        h1 {
             font-size: 2.5rem;
         }
 
@@ -51,6 +57,97 @@
             color: #ecf0f1;
             font-size: 1.2rem;
             margin-top: 0.5rem;
+        }
+
+        .profile-section {
+            background: var(--card-background);
+            border-radius: 8px;
+            padding: var(--section-padding);
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .role-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 1.5rem 0;
+        }
+
+        .info-card {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .philosophy-section {
+            margin: 2rem 0;
+        }
+
+        .focus-areas {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .focus-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease;
+        }
+
+        .focus-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .focus-card i {
+            color: var(--secondary-color);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .strengths-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            list-style: none;
+            padding: 0;
+        }
+
+        .strength-item {
+            background: white;
+            padding: 1rem;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .strength-item i {
+            color: var(--secondary-color);
+        }
+
+        .work-style-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 1.5rem 0;
+        }
+
+        .style-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .style-card h3 {
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
         }
 
         .projects-grid {
@@ -65,73 +162,32 @@
             border-radius: 8px;
             padding: 20px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            transition: transform 0.2s ease;
         }
 
         .project-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
 
-        .project-card h3 {
-            margin-top: 0;
-            color: var(--primary-color);
-        }
-
-        .project-card p {
-            margin-bottom: 1rem;
-        }
-
-        .feature-list {
-            list-style-type: none;
-            padding-left: 0;
-            margin-bottom: 1.5rem;
-        }
-
-        .feature-list li {
-            margin-bottom: 0.5rem;
-            padding-left: 1.5rem;
-            position: relative;
-        }
-
-        .feature-list li:before {
-            content: "•";
-            color: var(--secondary-color);
-            position: absolute;
-            left: 0;
-            font-weight: bold;
-        }
-
-        .project-link {
-            display: inline-block;
-            padding: 8px 16px;
-            background-color: var(--secondary-color);
-            color: white;
-            text-decoration: none;
-            border-radius: 4px;
-            transition: background-color 0.2s ease-in-out;
-        }
-
-        .project-link:hover {
-            background-color: #2980b9;
-        }
-
-        .project-status {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-            background-color: #f1c40f;
-            color: #34495e;
-        }
-
-        .about-section {
-            background: var(--card-background);
-            border-radius: 8px;
+        .feedback-section {
+            background: white;
             padding: 2rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        .feedback-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .feedback-card {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-color);
         }
 
         footer {
@@ -140,67 +196,177 @@
             margin-top: 2rem;
             border-top: 1px solid #eee;
         }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .role-info {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
     <header>
         <div class="header-content">
             <h1>Rob Stern</h1>
-            <div class="subtitle">Project Portfolio</div>
+            <div class="subtitle">Team Lead, Cash App Taxes – Tier 2 (CAT)</div>
         </div>
     </header>
 
     <div class="container">
-        <section class="about-section">
-            <h2>About</h2>
-            <p>Welcome to my project portfolio! Here you'll find a collection of my work and ongoing projects. 
-               I specialize in creating interactive tools and applications, with a focus on tax-related solutions and interactive experiences.</p>
+        <section class="profile-section">
+            <h2>Professional Profile</h2>
+            <div class="role-info">
+                <div class="info-card">
+                    <h3><i class="fas fa-building"></i> Company</h3>
+                    <p>Square (Block, Inc.)</p>
+                </div>
+                <div class="info-card">
+                    <h3><i class="fas fa-tasks"></i> Focus Areas</h3>
+                    <p>Tax Support Operations, Escalations, Process Management, Training & Development, Strategic Planning</p>
+                </div>
+            </div>
         </section>
 
-        <section class="projects">
-            <h2>Projects</h2>
-            <div class="projects-grid">
-                <!-- Tax Expert AI Widget -->
-                <div class="project-card">
-                    <h3>Tax Expert AI Widget</h3>
-                    <div class="project-status">In Development</div>
-                    <p>An advanced interactive widget designed to revolutionize tax assistance and calculations.</p>
-                    <h4>Key Features:</h4>
-                    <ul class="feature-list">
-                        <li>Multi-tab interface (Chat, Calculator, Form Finder)</li>
-                        <li>State and tax year context management</li>
-                        <li>Security badges and data protection</li>
-                        <li>Progress tracking visualization</li>
-                        <li>Form search and preview capability</li>
-                        <li>Enhanced response formatting</li>
-                    </ul>
-                    <p><strong>Tech Stack:</strong> HTML, CSS, JavaScript</p>
-                    <a href="/tax-expert-widget" class="project-link">View Project</a>
-                </div>
+        <section class="philosophy-section">
+            <h2><i class="fas fa-compass"></i> Leadership Philosophy</h2>
+            <p>I lead with clarity, structure, and purpose. My goal is to build an environment where expectations are clear, growth is intentional, and operations run efficiently—with a constant focus on customer impact.</p>
+            <p>I balance strategic thinking with execution discipline. I believe in empowering team members through thoughtful training, process transparency, and measurable objectives. While I expect high standards, I offer support and coaching to help you meet them.</p>
+        </section>
 
-                <!-- Interactive Game -->
-                <div class="project-card">
-                    <h3>Interactive Game Project</h3>
-                    <div class="project-status">In Planning</div>
-                    <p>An engaging interactive game being developed as part of my learning journey.</p>
-                    <h4>Planned Features:</h4>
-                    <ul class="feature-list">
-                        <li>Interactive gameplay mechanics</li>
-                        <li>User-friendly interface</li>
-                        <li>Score tracking system</li>
-                        <li>Progressive difficulty levels</li>
-                    </ul>
-                    <p><strong>Tech Stack:</strong> To be determined</p>
-                    <a href="#" class="project-link">Coming Soon</a>
-                </div>
+        <section class="focus-areas">
+            <div class="focus-card">
+                <i class="fas fa-bullseye"></i>
+                <h3>Clarity & Accountability</h3>
+                <p>Clear goals, role expectations, DRIs, and follow-through on commitments.</p>
+            </div>
+            <div class="focus-card">
+                <i class="fas fa-chart-line"></i>
+                <h3>Operational Excellence</h3>
+                <p>Refined processes, efficient tools, and well-maintained metrics dashboards.</p>
+            </div>
+            <div class="focus-card">
+                <i class="fas fa-users"></i>
+                <h3>Customer-Centricity</h3>
+                <p>Escalations, complaints, and cases should reflect empathy + accuracy.</p>
+            </div>
+            <div class="focus-card">
+                <i class="fas fa-graduation-cap"></i>
+                <h3>Team Growth</h3>
+                <p>Coaching, IDPs, training pathways, and structured performance feedback.</p>
+            </div>
+        </section>
 
-                <!-- Future Project Card -->
-                <div class="project-card">
-                    <h3>Future Project</h3>
-                    <div class="project-status">Planning</div>
-                    <p>More exciting projects coming soon! Stay tuned for updates.</p>
-                    <a href="#" class="project-link">Coming Soon</a>
+        <section class="profile-section">
+            <h2><i class="fas fa-key"></i> Key Strengths</h2>
+            <ul class="strengths-list">
+                <li class="strength-item">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <span>Designing and scaling structured training programs</span>
+                </li>
+                <li class="strength-item">
+                    <i class="fas fa-tasks"></i>
+                    <span>Streamlining complaints & escalation handling</span>
+                </li>
+                <li class="strength-item">
+                    <i class="fas fa-bullseye"></i>
+                    <span>Setting and driving OKRs tied to measurable business outcomes</span>
+                </li>
+                <li class="strength-item">
+                    <i class="fas fa-users"></i>
+                    <span>Coaching for growth while maintaining performance standards</span>
+                </li>
+                <li class="strength-item">
+                    <i class="fas fa-tools"></i>
+                    <span>Advocating for process/tooling improvements via feedback loops</span>
+                </li>
+                <li class="strength-item">
+                    <i class="fas fa-gamepad"></i>
+                    <span>Creating engagement through gamification and team culture rituals</span>
+                </li>
+            </ul>
+        </section>
+
+        <section class="profile-section">
+            <h2><i class="fas fa-brain"></i> Current Focus Areas</h2>
+            <ul class="strengths-list">
+                <li class="strength-item">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>Finalizing Tier 2 training on advanced tax topics (e.g., 1099-R, HSA)</span>
+                </li>
+                <li class="strength-item">
+                    <i class="fas fa-comments"></i>
+                    <span>Rolling out QuickText adoption + removing legacy Tax Responses</span>
+                </li>
+                <li class="strength-item">
+                    <i class="fas fa-route"></i>
+                    <span>Launching the MIAW system and refining case routing tooling</span>
+                </li>
+                <li class="strength-item">
+                    <i class="fas fa-gamepad"></i>
+                    <span>Building a digital escape room for tax training engagement</span>
+                </li>
+                <li class="strength-item">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Evolving QA metrics & dashboard clarity for better performance coaching</span>
+                </li>
+            </ul>
+        </section>
+
+        <section class="feedback-section">
+            <h2><i class="fas fa-comment"></i> Leadership Feedback Highlights</h2>
+            <div class="feedback-grid">
+                <div class="feedback-card">
+                    <p>"Clear, decisive, and empathetic leader"</p>
                 </div>
+                <div class="feedback-card">
+                    <p>"Strong planner with strategic visibility and execution follow-through"</p>
+                </div>
+                <div class="feedback-card">
+                    <p>"Builds a culture of respect, growth, and peer support"</p>
+                </div>
+                <div class="feedback-card">
+                    <p>"Welcomes feedback and uses it to iterate quickly"</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="projects-grid">
+            <div class="project-card">
+                <h3>Tax Expert AI Widget</h3>
+                <div class="project-status">In Development</div>
+                <p>An advanced interactive widget designed to revolutionize tax assistance and calculations.</p>
+                <h4>Key Features:</h4>
+                <ul class="feature-list">
+                    <li>Multi-tab interface (Chat, Calculator, Form Finder)</li>
+                    <li>State and tax year context management</li>
+                    <li>Security badges and data protection</li>
+                    <li>Progress tracking visualization</li>
+                </ul>
+                <p><strong>Tech Stack:</strong> HTML, CSS, JavaScript</p>
+                <a href="/tax-expert-widget" class="project-link">View Project</a>
+            </div>
+
+            <div class="project-card">
+                <h3>Tax Quest Game</h3>
+                <div class="project-status">In Development</div>
+                <p>An interactive game designed to make tax learning engaging and fun.</p>
+                <h4>Key Features:</h4>
+                <ul class="feature-list">
+                    <li>Character progression system</li>
+                    <li>Office management simulation</li>
+                    <li>Client management system</li>
+                    <li>Training and skill development</li>
+                </ul>
+                <p><strong>Tech Stack:</strong> HTML5, CSS3, JavaScript</p>
+                <a href="/game.html" class="project-link">Play Game</a>
             </div>
         </section>
     </div>
