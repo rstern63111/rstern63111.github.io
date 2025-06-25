@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Action Figures Project - Rob Stern</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --background-color: #f5f6fa;
+            --text-color: #2c3e50;
+            --card-background: white;
+            --section-padding: 2rem;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .back-link {
+            color: white;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        h1, h2, h3 {
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .project-section {
+            background: var(--card-background);
+            border-radius: 8px;
+            padding: var(--section-padding);
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .figure-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .figure-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+
+        .figure-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .figure-image {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .figure-content {
+            padding: 1.5rem;
+        }
+
+        .figure-title {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .figure-description {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .tech-stack {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+
+        .tech-stack span {
+            display: inline-block;
+            background: var(--secondary-color);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            margin: 0.25rem;
+        }
+
+        .process-section {
+            margin-top: 2rem;
+        }
+
+        .process-steps {
+            list-style: none;
+            padding: 0;
+            margin: 1rem 0;
+        }
+
+        .process-step {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .process-step h3 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 2rem;
+            border-top: 1px solid #eee;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .figure-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <a href="index.html" class="back-link">
+                <i class="fas fa-arrow-left"></i>&nbsp; Back to Portfolio
+            </a>
+            <h1>AI Action Figures Project</h1>
+            <div class="subtitle">Bringing AI Characters to Life</div>
+        </div>
+    </header>
+
+    <div class="container">
+        <section class="project-section">
+            <h2>Project Overview</h2>
+            <p>A creative exploration of AI personalities transformed into collectible action figures. This project combines digital art, character design, and modern tech culture to create unique, playful representations of AI assistants and digital personas.</p>
+            
+            <div class="tech-stack">
+                <h3>Tools Used:</h3>
+                <span>Midjourney</span>
+                <span>Adobe Photoshop</span>
+                <span>ChatGPT</span>
+                <span>3D Modeling</span>
+            </div>
+        </section>
+
+        <section class="project-section">
+            <h2>The Collection</h2>
+            <div class="figure-grid">
+                <div class="figure-card">
+                    <img src="images/ai-action-figures/dillon.png" alt="Dillon Action Figure" class="figure-image">
+                    <div class="figure-content">
+                        <h3 class="figure-title">Dillon - He's Just a Guy</h3>
+                        <p class="figure-description">
+                            Complete with his signature black cap, Diet Coke, and smartphone. 
+                            Includes a collectible dog tag accessory.
+                        </p>
+                    </div>
+                </div>
+                <!-- More figure cards will be added here -->
+            </div>
+        </section>
+
+        <section class="project-section">
+            <h2>Design Process</h2>
+            <div class="process-steps">
+                <div class="process-step">
+                    <h3>1. Character Conceptualization</h3>
+                    <p>Each figure starts with a deep dive into the AI's personality traits, common interactions, and unique characteristics that make them special to users.</p>
+                </div>
+                <div class="process-step">
+                    <h3>2. Visual Design</h3>
+                    <p>Using AI image generation and digital art tools to create the initial designs, followed by refinement in professional design software.</p>
+                </div>
+                <div class="process-step">
+                    <h3>3. Packaging Design</h3>
+                    <p>Creating authentic-looking packaging that mimics classic action figure presentation while incorporating modern tech elements.</p>
+                </div>
+                <div class="process-step">
+                    <h3>4. Accessory Selection</h3>
+                    <p>Carefully chosen accessories that represent each character's unique traits and common interactions.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="project-section">
+            <h2>Future Additions</h2>
+            <p>The collection is continuously growing with new AI personalities and variations. Future releases will include:</p>
+            <ul>
+                <li>Special edition variants</li>
+                <li>AI assistant crossovers</li>
+                <li>Interactive digital companions</li>
+                <li>Limited edition releases</li>
+            </ul>
+        </section>
+    </div>
+
+    <footer>
+        <p>© 2024 Rob Stern. All rights reserved.</p>
+    </footer>
+</body>
+</html>

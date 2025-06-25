@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Sticker Project - Rob Stern</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Copy the existing styles from index.html */
+        /* ... */
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>AI Sticker Project</h1>
+            <div class="subtitle">Creative AI-Generated Team Stickers</div>
+        </div>
+    </header>
+
+    <div class="container">
+        <section class="gallery-section">
+            <h2>Project Gallery</h2>
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <img src="images/ai-stickers/Refund Rangers Tax Team Fun.png" alt="Refund Rangers Team Sticker" class="gallery-image">
+                    <div class="gallery-caption">Refund Rangers Team Sticker</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="images/ai-stickers/image (15).png" alt="Team Sticker Design" class="gallery-image">
+                    <div class="gallery-caption">Team Sticker Design</div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>© 2024 Rob Stern. All rights reserved.</p>
+    </footer>
+
+    <!-- Modal for image preview -->
+    <div class="modal" id="imageModal">
+        <img class="modal-content" id="modalImage">
+        <div class="modal-caption" id="modalCaption"></div>
+    </div>
+
+    <script>
+        // Add modal functionality
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImage');
+        const modalCaption = document.getElementById('modalCaption');
+        const galleryItems = document.querySelectorAll('.gallery-item');
+
+        galleryItems.forEach(item => {
+            item.addEventListener('click', function() {
+                const img = item.querySelector('.gallery-image');
+                const caption = item.querySelector('.gallery-caption');
+                
+                modal.style.display = "block";
+                modalImg.src = img.src;
+                modalCaption.innerHTML = caption.innerHTML;
+            });
+        });
+
+        modal.addEventListener('click', function() {
+            modal.style.display = "none";
+        });
+    </script>
+</body>
+</html>
