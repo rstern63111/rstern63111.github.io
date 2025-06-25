@@ -17,25 +17,26 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             line-height: 1.6;
             margin: 0;
             padding: 0;
             background-color: var(--background-color);
             color: var(--text-color);
+            letter-spacing: -0.01em;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 40px 20px;
         }
 
         header {
             background-color: var(--primary-color);
             color: white;
-            padding: 2rem 0;
-            margin-bottom: 2rem;
+            padding: 4rem 0;
+            margin-bottom: 3rem;
         }
 
         .header-content {
@@ -47,24 +48,48 @@
         h1, h2, h3 {
             margin: 0;
             line-height: 1.2;
+            letter-spacing: -0.02em;
+            font-weight: 600;
         }
 
         h1 {
-            font-size: 2.5rem;
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
         }
 
         .subtitle {
             color: #ecf0f1;
-            font-size: 1.2rem;
+            font-size: 1.4rem;
             margin-top: 0.5rem;
+            opacity: 0.9;
+        }
+
+        section {
+            margin-bottom: 4rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
         }
 
         .profile-section {
             background: var(--card-background);
-            border-radius: 8px;
+            border-radius: 16px;
             padding: var(--section-padding);
             margin-bottom: 2rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .profile-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
         }
 
         .role-info {
@@ -76,9 +101,16 @@
 
         .info-card {
             background: #f8f9fa;
-            padding: 1.5rem;
-            border-radius: 8px;
-            border-left: 4px solid var(--secondary-color);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .info-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border-color: var(--primary-color);
         }
 
         .philosophy-section {
@@ -94,41 +126,63 @@
 
         .focus-card {
             background: white;
-            padding: 1.5rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            transition: transform 0.2s ease;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0,0,0,0.1);
         }
 
         .focus-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border-color: var(--primary-color);
         }
 
         .focus-card i {
-            color: var(--secondary-color);
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .focus-card:hover i {
+            transform: scale(1.1);
         }
 
         .strengths-list {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1rem;
+            gap: 1.5rem;
             list-style: none;
             padding: 0;
         }
 
         .strength-item {
             background: white;
-            padding: 1rem;
-            border-radius: 6px;
+            padding: 1.5rem;
+            border-radius: 12px;
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 1.5rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .strength-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border-color: var(--primary-color);
         }
 
         .strength-item i {
-            color: var(--secondary-color);
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .strength-item:hover i {
+            transform: scale(1.1);
         }
 
         .work-style-grid {
