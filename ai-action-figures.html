@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Action Figures Project - Rob Stern</title>
+    <title>AI Action Figures - Rob Stern</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
@@ -13,7 +13,6 @@
             --background-color: #f5f6fa;
             --text-color: #2c3e50;
             --card-background: white;
-            --section-padding: 2rem;
         }
 
         body {
@@ -23,12 +22,6 @@
             padding: 0;
             background-color: var(--background-color);
             color: var(--text-color);
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
         }
 
         header {
@@ -44,107 +37,130 @@
             padding: 0 20px;
         }
 
-        .back-link {
-            color: white;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            margin-bottom: 1rem;
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
         }
 
-        .back-link:hover {
-            text-decoration: underline;
-        }
-
-        h1, h2, h3 {
+        h1 {
             margin: 0;
-            line-height: 1.2;
+            font-size: 2.5rem;
         }
 
-        .project-section {
-            background: var(--card-background);
-            border-radius: 8px;
-            padding: var(--section-padding);
-            margin-bottom: 2rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        .subtitle {
+            color: #ecf0f1;
+            font-size: 1.2rem;
+            margin-top: 0.5rem;
         }
 
-        .figure-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+        .gallery-section {
             margin: 2rem 0;
         }
 
-        .figure-card {
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            transition: transform 0.2s;
-        }
-
-        .figure-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .figure-image {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        .figure-content {
-            padding: 1.5rem;
-        }
-
-        .figure-title {
-            font-size: 1.25rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .figure-description {
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .tech-stack {
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid #eee;
-        }
-
-        .tech-stack span {
-            display: inline-block;
-            background: var(--secondary-color);
-            color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            margin: 0.25rem;
-        }
-
-        .process-section {
-            margin-top: 2rem;
-        }
-
-        .process-steps {
-            list-style: none;
-            padding: 0;
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
             margin: 1rem 0;
         }
 
-        .process-step {
+        .gallery-item {
+            position: relative;
             background: white;
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
         }
 
-        .process-step h3 {
+        .gallery-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .gallery-image-container {
+            position: relative;
+            padding-top: 100%; /* 1:1 aspect ratio */
+            overflow: hidden;
+        }
+
+        .gallery-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover .gallery-image {
+            transform: scale(1.05);
+        }
+
+        .gallery-caption {
+            padding: 1rem;
+            background: white;
+        }
+
+        .gallery-title {
+            font-size: 1.1rem;
             color: var(--primary-color);
-            margin-bottom: 0.5rem;
+            margin: 0;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            cursor: pointer;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 90%;
+            max-height: 90vh;
+        }
+
+        .modal-image {
+            max-width: 100%;
+            max-height: 90vh;
+            object-fit: contain;
+        }
+
+        .modal-caption {
+            position: absolute;
+            bottom: -2rem;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: white;
+            padding: 1rem;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: opacity 0.3s ease;
+            margin-bottom: 1rem;
+        }
+
+        .back-button:hover {
+            opacity: 0.8;
         }
 
         footer {
@@ -153,96 +169,147 @@
             margin-top: 2rem;
             border-top: 1px solid #eee;
         }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 10px;
-            }
-
-            .figure-grid {
-                grid-template-columns: 1fr;
-            }
-        }
     </style>
 </head>
 <body>
     <header>
         <div class="header-content">
-            <a href="index.html" class="back-link">
-                <i class="fas fa-arrow-left"></i>&nbsp; Back to Portfolio
+            <a href="/" class="back-button">
+                <i class="fas fa-arrow-left"></i>
+                Back to Portfolio
             </a>
-            <h1>AI Action Figures Project</h1>
-            <div class="subtitle">Bringing AI Characters to Life</div>
+            <h1>AI Action Figures</h1>
+            <div class="subtitle">Custom AI-Generated Action Figure Designs</div>
         </div>
     </header>
 
     <div class="container">
-        <section class="project-section">
-            <h2>Project Overview</h2>
-            <p>A creative exploration of AI personalities transformed into collectible action figures. This project combines digital art, character design, and modern tech culture to create unique, playful representations of AI assistants and digital personas.</p>
-            
-            <div class="tech-stack">
-                <h3>Tools Used:</h3>
-                <span>Midjourney</span>
-                <span>Adobe Photoshop</span>
-                <span>ChatGPT</span>
-                <span>3D Modeling</span>
-            </div>
-        </section>
-
-        <section class="project-section">
-            <h2>The Collection</h2>
-            <div class="figure-grid">
-                <div class="figure-card">
-                    <img src="images/ai-action-figures/dillon.png" alt="Dillon Action Figure" class="figure-image">
-                    <div class="figure-content">
-                        <h3 class="figure-title">Dillon - He's Just a Guy</h3>
-                        <p class="figure-description">
-                            Complete with his signature black cap, Diet Coke, and smartphone. 
-                            Includes a collectible dog tag accessory.
-                        </p>
+        <section class="gallery-section">
+            <h2>Project Gallery</h2>
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <div class="gallery-image-container">
+                        <img src="images/ai-action-figures/Dillon Action Figure in Packaging.png" alt="Dillon Action Figure in Packaging" class="gallery-image">
+                    </div>
+                    <div class="gallery-caption">
+                        <h3 class="gallery-title">Dillon Action Figure in Packaging</h3>
                     </div>
                 </div>
-                <!-- More figure cards will be added here -->
+                <div class="gallery-item">
+                    <div class="gallery-image-container">
+                        <img src="images/ai-action-figures/Football Fanatic Ollie Action Figure.png" alt="Football Fanatic Ollie Action Figure" class="gallery-image">
+                    </div>
+                    <div class="gallery-caption">
+                        <h3 class="gallery-title">Football Fanatic Ollie</h3>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-image-container">
+                        <img src="images/ai-action-figures/ChatGPT Image May 21, 2025, 01_33_19 PM.png" alt="AI Action Figure Design" class="gallery-image">
+                    </div>
+                    <div class="gallery-caption">
+                        <h3 class="gallery-title">Action Figure Concept 1</h3>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-image-container">
+                        <img src="images/ai-action-figures/ChatGPT Image May 21, 2025, 01_46_12 PM.png" alt="AI Action Figure Design" class="gallery-image">
+                    </div>
+                    <div class="gallery-caption">
+                        <h3 class="gallery-title">Action Figure Concept 2</h3>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-image-container">
+                        <img src="images/ai-action-figures/ChatGPT Image May 21, 2025, 04_42_33 PM.png" alt="AI Action Figure Design" class="gallery-image">
+                    </div>
+                    <div class="gallery-caption">
+                        <h3 class="gallery-title">Action Figure Concept 3</h3>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-image-container">
+                        <img src="images/ai-action-figures/image (20).png" alt="AI Action Figure Design" class="gallery-image">
+                    </div>
+                    <div class="gallery-caption">
+                        <h3 class="gallery-title">Action Figure Design 1</h3>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-image-container">
+                        <img src="images/ai-action-figures/image (21).png" alt="AI Action Figure Design" class="gallery-image">
+                    </div>
+                    <div class="gallery-caption">
+                        <h3 class="gallery-title">Action Figure Design 2</h3>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-image-container">
+                        <img src="images/ai-action-figures/image (22).png" alt="AI Action Figure Design" class="gallery-image">
+                    </div>
+                    <div class="gallery-caption">
+                        <h3 class="gallery-title">Action Figure Design 3</h3>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-image-container">
+                        <img src="images/ai-action-figures/image (23).png" alt="AI Action Figure Design" class="gallery-image">
+                    </div>
+                    <div class="gallery-caption">
+                        <h3 class="gallery-title">Action Figure Design 4</h3>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-image-container">
+                        <img src="images/ai-action-figures/image (24).png" alt="AI Action Figure Design" class="gallery-image">
+                    </div>
+                    <div class="gallery-caption">
+                        <h3 class="gallery-title">Action Figure Design 5</h3>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-image-container">
+                        <img src="images/ai-action-figures/image (25).png" alt="AI Action Figure Design" class="gallery-image">
+                    </div>
+                    <div class="gallery-caption">
+                        <h3 class="gallery-title">Action Figure Design 6</h3>
+                    </div>
+                </div>
             </div>
         </section>
+    </div>
 
-        <section class="project-section">
-            <h2>Design Process</h2>
-            <div class="process-steps">
-                <div class="process-step">
-                    <h3>1. Character Conceptualization</h3>
-                    <p>Each figure starts with a deep dive into the AI's personality traits, common interactions, and unique characteristics that make them special to users.</p>
-                </div>
-                <div class="process-step">
-                    <h3>2. Visual Design</h3>
-                    <p>Using AI image generation and digital art tools to create the initial designs, followed by refinement in professional design software.</p>
-                </div>
-                <div class="process-step">
-                    <h3>3. Packaging Design</h3>
-                    <p>Creating authentic-looking packaging that mimics classic action figure presentation while incorporating modern tech elements.</p>
-                </div>
-                <div class="process-step">
-                    <h3>4. Accessory Selection</h3>
-                    <p>Carefully chosen accessories that represent each character's unique traits and common interactions.</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="project-section">
-            <h2>Future Additions</h2>
-            <p>The collection is continuously growing with new AI personalities and variations. Future releases will include:</p>
-            <ul>
-                <li>Special edition variants</li>
-                <li>AI assistant crossovers</li>
-                <li>Interactive digital companions</li>
-                <li>Limited edition releases</li>
-            </ul>
-        </section>
+    <!-- Modal for image preview -->
+    <div class="modal" id="imageModal">
+        <img class="modal-content" id="modalImage">
+        <div class="modal-caption" id="modalCaption"></div>
     </div>
 
     <footer>
         <p>© 2024 Rob Stern. All rights reserved.</p>
     </footer>
+
+    <script>
+        // Add modal functionality
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImage');
+        const modalCaption = document.getElementById('modalCaption');
+        const galleryItems = document.querySelectorAll('.gallery-item');
+
+        galleryItems.forEach(item => {
+            item.addEventListener('click', function() {
+                const img = item.querySelector('.gallery-image');
+                const caption = item.querySelector('.gallery-title');
+                
+                modal.style.display = "block";
+                modalImg.src = img.src;
+                modalCaption.innerHTML = caption.innerHTML;
+            });
+        });
+
+        modal.addEventListener('click', function() {
+            modal.style.display = "none";
+        });
+    </script>
 </body>
 </html>

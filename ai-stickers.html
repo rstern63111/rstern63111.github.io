@@ -3,18 +3,183 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Sticker Project - Rob Stern</title>
+    <title>AI Team Stickers - Rob Stern</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Copy the existing styles from index.html */
-        /* ... */
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --background-color: #f5f6fa;
+            --text-color: #2c3e50;
+            --card-background: white;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+
+        .subtitle {
+            color: #ecf0f1;
+            font-size: 1.2rem;
+            margin-top: 0.5rem;
+        }
+
+        .gallery-section {
+            margin: 2rem 0;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .gallery-item {
+            position: relative;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .gallery-image-container {
+            position: relative;
+            padding-top: 100%; /* 1:1 aspect ratio */
+            overflow: hidden;
+        }
+
+        .gallery-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover .gallery-image {
+            transform: scale(1.05);
+        }
+
+        .gallery-caption {
+            padding: 1rem;
+            background: white;
+        }
+
+        .gallery-title {
+            font-size: 1.1rem;
+            color: var(--primary-color);
+            margin: 0;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            cursor: pointer;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 90%;
+            max-height: 90vh;
+        }
+
+        .modal-image {
+            max-width: 100%;
+            max-height: 90vh;
+            object-fit: contain;
+        }
+
+        .modal-caption {
+            position: absolute;
+            bottom: -2rem;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: white;
+            padding: 1rem;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: opacity 0.3s ease;
+            margin-bottom: 1rem;
+        }
+
+        .back-button:hover {
+            opacity: 0.8;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 2rem;
+            border-top: 1px solid #eee;
+        }
     </style>
 </head>
 <body>
     <header>
         <div class="header-content">
-            <h1>AI Sticker Project</h1>
-            <div class="subtitle">Creative AI-Generated Team Stickers</div>
+            <a href="/" class="back-button">
+                <i class="fas fa-arrow-left"></i>
+                Back to Portfolio
+            </a>
+            <h1>AI Team Stickers</h1>
+            <div class="subtitle">Custom AI-Generated Team Sticker Designs</div>
         </div>
     </header>
 
@@ -23,26 +188,82 @@
             <h2>Project Gallery</h2>
             <div class="gallery-grid">
                 <div class="gallery-item">
-                    <img src="images/ai-stickers/Refund Rangers Tax Team Fun.png" alt="Refund Rangers Team Sticker" class="gallery-image">
-                    <div class="gallery-caption">Refund Rangers Team Sticker</div>
+                    <div class="gallery-image-container">
+                        <img src="images/ai-stickers/Refund Rangers Tax Team Fun.png" alt="Refund Rangers Team Sticker" class="gallery-image">
+                    </div>
+                    <div class="gallery-caption">
+                        <h3 class="gallery-title">Refund Rangers Team Sticker</h3>
+                    </div>
                 </div>
                 <div class="gallery-item">
-                    <img src="images/ai-stickers/image (15).png" alt="Team Sticker Design" class="gallery-image">
-                    <div class="gallery-caption">Team Sticker Design</div>
+                    <div class="gallery-image-container">
+                        <img src="images/ai-stickers/7de59c6b-eb5e-4fc5-afa2-90500e47750b.png" alt="Team Sticker Design" class="gallery-image">
+                    </div>
+                    <div class="gallery-caption">
+                        <h3 class="gallery-title">Team Sticker Design 1</h3>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-image-container">
+                        <img src="images/ai-stickers/999F32EF-04CB-40D5-971E-7D8D0F0873BF.png" alt="Team Sticker Design" class="gallery-image">
+                    </div>
+                    <div class="gallery-caption">
+                        <h3 class="gallery-title">Team Sticker Design 2</h3>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-image-container">
+                        <img src="images/ai-stickers/image (15).png" alt="Team Sticker Design" class="gallery-image">
+                    </div>
+                    <div class="gallery-caption">
+                        <h3 class="gallery-title">Team Sticker Design 3</h3>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-image-container">
+                        <img src="images/ai-stickers/image (16).png" alt="Team Sticker Design" class="gallery-image">
+                    </div>
+                    <div class="gallery-caption">
+                        <h3 class="gallery-title">Team Sticker Design 4</h3>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-image-container">
+                        <img src="images/ai-stickers/image (17).png" alt="Team Sticker Design" class="gallery-image">
+                    </div>
+                    <div class="gallery-caption">
+                        <h3 class="gallery-title">Team Sticker Design 5</h3>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-image-container">
+                        <img src="images/ai-stickers/image (18).png" alt="Team Sticker Design" class="gallery-image">
+                    </div>
+                    <div class="gallery-caption">
+                        <h3 class="gallery-title">Team Sticker Design 6</h3>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-image-container">
+                        <img src="images/ai-stickers/image (19).png" alt="Team Sticker Design" class="gallery-image">
+                    </div>
+                    <div class="gallery-caption">
+                        <h3 class="gallery-title">Team Sticker Design 7</h3>
+                    </div>
                 </div>
             </div>
         </section>
     </div>
-
-    <footer>
-        <p>© 2024 Rob Stern. All rights reserved.</p>
-    </footer>
 
     <!-- Modal for image preview -->
     <div class="modal" id="imageModal">
         <img class="modal-content" id="modalImage">
         <div class="modal-caption" id="modalCaption"></div>
     </div>
+
+    <footer>
+        <p>© 2024 Rob Stern. All rights reserved.</p>
+    </footer>
 
     <script>
         // Add modal functionality
@@ -54,7 +275,7 @@
         galleryItems.forEach(item => {
             item.addEventListener('click', function() {
                 const img = item.querySelector('.gallery-image');
-                const caption = item.querySelector('.gallery-caption');
+                const caption = item.querySelector('.gallery-title');
                 
                 modal.style.display = "block";
                 modalImg.src = img.src;
