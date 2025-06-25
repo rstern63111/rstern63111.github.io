@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - LEGO Brick by Brick</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --lego-red: #D01012;
+            --lego-yellow: #FFD700;
+            --lego-blue: #006CB7;
+            --lego-green: #00AF4D;
+            --lego-skin: #FBE7B2;
+            --background: #F0F0F0;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: var(--background);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 1000px;
+        }
+
+        .error-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 100;
+            color: #333;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            background: rgba(255,255,255,0.9);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        .error-message h1 {
+            font-size: 4rem;
+            margin: 0;
+            color: var(--lego-red);
+        }
+
+        .error-message p {
+            font-size: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .home-button {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background: var(--lego-blue);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: transform 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .home-button:hover {
+            transform: scale(1.05);
+        }
+
+        .lego-brick {
+            position: absolute;
+            width: 80px;
+            height: 40px;
+            background: var(--lego-red);
+            border-radius: 4px;
+            transform-style: preserve-3d;
+            animation: fall linear infinite;
+        }
+
+        .lego-brick::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 10px;
+            right: 10px;
+            height: 8px;
+            background: currentColor;
+            border-radius: 4px 4px 0 0;
+        }
+
+        .lego-brick::after {
+            content: '';
+            position: absolute;
+            top: -12px;
+            left: 15px;
+            width: 50px;
+            height: 12px;
+            background: rgba(0,0,0,0.1);
+            border-radius: 50%;
+        }
+
+        .lego-studs {
+            position: absolute;
+            top: -12px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-around;
+            padding: 0 10px;
+        }
+
+        .lego-stud {
+            width: 12px;
+            height: 12px;
+            background: currentColor;
+            border-radius: 50%;
+        }
+
+        .minifig {
+            position: absolute;
+            width: 40px;
+            height: 80px;
+            animation: fall linear infinite;
+            transform-style: preserve-3d;
+        }
+
+        .minifig-head {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 24px;
+            height: 24px;
+            background: var(--lego-skin);
+            border-radius: 50% 50% 40% 40%;
+        }
+
+        .minifig-body {
+            position: absolute;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 35px;
+            background: currentColor;
+            border-radius: 5px;
+        }
+
+        .minifig-legs {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 20px;
+            background: #1a1a1a;
+            border-radius: 0 0 5px 5px;
+        }
+
+        .minifig-arms {
+            position: absolute;
+            top: 26px;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: currentColor;
+        }
+
+        @keyframes fall {
+            from {
+                transform: translateY(-100vh) rotateX(45deg) rotateZ(0deg);
+            }
+            to {
+                transform: translateY(100vh) rotateX(45deg) rotateZ(360deg);
+            }
+        }
+
+        @keyframes minifig-fall {
+            from {
+                transform: translateY(-100vh) rotateZ(0deg);
+            }
+            to {
+                transform: translateY(100vh) rotateZ(720deg);
+            }
+        }
+
+        .shadow {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 20px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.1));
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="error-message">
+            <h1>404</h1>
+            <p>Oops! Our LEGO friends are still building this page!</p>
+            <p>Watch out for falling bricks and minifigs...</p>
+            <a href="/" class="home-button">
+                <i class="fas fa-home"></i> Back to Home
+            </a>
+        </div>
+        <div class="shadow"></div>
+    </div>
+
+    <script>
+        const colors = [
+            '#D01012', // red
+            '#FFD700', // yellow
+            '#006CB7', // blue
+            '#00AF4D', // green
+        ];
+
+        const minifigColors = [
+            '#D01012', // red
+            '#FFD700', // yellow
+            '#006CB7', // blue
+            '#00AF4D', // green
+            '#FFFFFF', // white
+            '#1E1E1E', // black
+            '#FFA500', // orange
+            '#800080', // purple
+        ];
+
+        const container = document.querySelector('.container');
+
+        function createLegoBrick() {
+            const brick = document.createElement('div');
+            brick.className = 'lego-brick';
+            
+            // Random color
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            brick.style.background = color;
+            brick.style.color = color;
+
+            // Random position
+            const left = Math.random() * (window.innerWidth - 80);
+            brick.style.left = `${left}px`;
+
+            // Random animation duration
+            const duration = 3 + Math.random() * 4;
+            brick.style.animationDuration = `${duration}s`;
+
+            // Add studs
+            const studs = document.createElement('div');
+            studs.className = 'lego-studs';
+            for (let i = 0; i < 4; i++) {
+                const stud = document.createElement('div');
+                stud.className = 'lego-stud';
+                studs.appendChild(stud);
+            }
+            brick.appendChild(studs);
+
+            // Remove brick after animation
+            brick.addEventListener('animationend', () => {
+                brick.remove();
+            });
+
+            container.appendChild(brick);
+        }
+
+        function createMinifig() {
+            const minifig = document.createElement('div');
+            minifig.className = 'minifig';
+            
+            // Random color for the body
+            const color = minifigColors[Math.floor(Math.random() * minifigColors.length)];
+            
+            // Create minifig parts
+            const head = document.createElement('div');
+            head.className = 'minifig-head';
+            
+            const body = document.createElement('div');
+            body.className = 'minifig-body';
+            body.style.backgroundColor = color;
+            
+            const legs = document.createElement('div');
+            legs.className = 'minifig-legs';
+            
+            const arms = document.createElement('div');
+            arms.className = 'minifig-arms';
+            arms.style.backgroundColor = color;
+
+            minifig.appendChild(head);
+            minifig.appendChild(body);
+            minifig.appendChild(legs);
+            minifig.appendChild(arms);
+
+            // Random position
+            const left = Math.random() * (window.innerWidth - 40);
+            minifig.style.left = `${left}px`;
+
+            // Random animation duration
+            const duration = 4 + Math.random() * 4;
+            minifig.style.animation = `minifig-fall ${duration}s linear infinite`;
+
+            // Remove minifig after animation
+            minifig.addEventListener('animationend', () => {
+                minifig.remove();
+            });
+
+            container.appendChild(minifig);
+        }
+
+        // Create initial items
+        for (let i = 0; i < 10; i++) {
+            setTimeout(() => {
+                if (Math.random() > 0.3) {
+                    createLegoBrick();
+                } else {
+                    createMinifig();
+                }
+            }, Math.random() * 2000);
+        }
+
+        // Continue creating items
+        setInterval(() => {
+            if (Math.random() > 0.3) {
+                createLegoBrick();
+            } else {
+                createMinifig();
+            }
+        }, 500);
+
+        // Add more items on resize
+        window.addEventListener('resize', () => {
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    if (Math.random() > 0.3) {
+                        createLegoBrick();
+                    } else {
+                        createMinifig();
+                    }
+                }, Math.random() * 1000);
+            }
+        });
+    </script>
+</body>
+</html>
