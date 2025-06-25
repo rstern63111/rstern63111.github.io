@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Tax Expert AI Assistant</title>
+    <!-- Add Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #05603A;
+            --secondary-color: #e8f5e9;
+            --error-color: #dc3545;
+            --warning-color: #ffc107;
+            --success-color: #28a745;
+            --text-color: #2f363f;
+            --border-color: #e0e0e0;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #f5f6fa;
+        }
+
+        .widget-container {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            background: white;
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .nav-tab {
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+            background: #f8f9fa;
+        }
+
+        .nav-tab.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Context Panel */
+        .context-panel {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .context-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .context-item select {
+            padding: 5px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Calculator Panel */
+        .calculator-panel {
+            display: none;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .calculator-panel.active {
+            display: block;
+        }
+
+        .calc-input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .calc-input-group input {
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            width: 150px;
+        }
+
+        /* Form Search Panel */
+        .form-search-panel {
+            display: none;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .form-search-panel.active {
+            display: block;
+        }
+
+        .form-search-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .form-results {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .form-result-item {
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+
+        .form-result-item:hover {
+            background: var(--secondary-color);
+        }
+
+        /* Progress Tracker */
+        .progress-tracker {
+            display: none;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .progress-tracker.active {
+            display: block;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+        }
+
+        .step-indicator {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 5px;
+        }
+
+        .step-indicator.completed {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .step-indicator.current {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Enhanced Chat Container */
+        .chat-container {
+            height: 400px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .message {
+            margin-bottom: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            max-width: 90%;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .user-message {
+            background: var(--primary-color);
+            color: white;
+            margin-left: auto;
+        }
+
+        .ai-message {
+            background: white;
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+        }
+
+        /* Enhanced Form References */
+        .form-reference {
+            background: var(--secondary-color);
+            padding: 8px;
+            border-radius: 4px;
+            margin: 5px 0;
+            font-family: monospace;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .form-reference i {
+            color: var(--primary-color);
+        }
+
+        /* Security Badge */
+        .security-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 8px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* Data Masking */
+        .masked-data {
+            font-family: monospace;
+            background: #f8f9fa;
+            padding: 2px 4px;
+            border-radius: 2px;
+        }
+
+        /* Tooltips */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Input Container */
+        .input-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .input-container input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .send-button {
+            padding: 8px 16px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .send-button:hover {
+            background: #044d2f;
+        }
+
+        /* Disclaimer */
+        .disclaimer {
+            font-size: 12px;
+            color: #666;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            margin-top: 15px;
+        }
+
+        /* Back Link */
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .widget-container {
+                padding: 10px;
+            }
+
+            .context-panel {
+                flex-direction: column;
+            }
+
+            .progress-steps {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .progress-step {
+                flex-direction: row;
+                gap: 10px;
+            }
+
+            .calc-input-group {
+                flex-direction: column;
+            }
+
+            .calc-input-group input {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-link">
+        <i class="fas fa-arrow-left"></i> Back to Portfolio
+    </a>
+
+    <div class="widget-container">
+        <!-- Navigation Tabs -->
+        <div class="nav-tabs">
+            <div class="nav-tab active" onclick="switchTab('chat')">
+                <i class="fas fa-comments"></i> Chat
+            </div>
+            <div class="nav-tab" onclick="switchTab('calculator')">
+                <i class="fas fa-calculator"></i> Tax Calculator
+            </div>
+            <div class="nav-tab" onclick="switchTab('forms')">
+                <i class="fas fa-file-alt"></i> Form Finder
+            </div>
+        </div>
+
+        <!-- Context Panel -->
+        <div class="context-panel">
+            <div class="context-item">
+                <i class="fas fa-map-marker-alt"></i>
+                <select id="stateSelector" onchange="updateState()">
+                    <option value="">Select State</option>
+                    <option value="CA">California</option>
+                    <option value="NY">New York</option>
+                    <!-- Add more states -->
+                </select>
+            </div>
+            <div class="context-item">
+                <i class="fas fa-calendar"></i>
+                <select id="taxYear" onchange="updateTaxYear()">
+                    <option value="2024">2024</option>
+                    <option value="2023">2023</option>
+                    <option value="2022">2022</option>
+                </select>
+            </div>
+            <div class="security-badge">
+                <i class="fas fa-shield-alt"></i>
+                Secure Mode
+            </div>
+        </div>
+
+        <!-- Calculator Panel -->
+        <div id="calculatorPanel" class="calculator-panel">
+            <h3>Tax Calculator</h3>
+            <div class="calc-input-group">
+                <input type="number" id="income" placeholder="Annual Income">
+                <input type="number" id="deductions" placeholder="Deductions">
+                <button onclick="calculateTax()" class="send-button">Calculate</button>
+            </div>
+            <div id="calculatorResult"></div>
+        </div>
+
+        <!-- Form Search Panel -->
+        <div id="formSearchPanel" class="form-search-panel">
+            <input type="text" class="form-search-input" placeholder="Search for tax forms..." 
+                   onkeyup="searchForms()">
+            <div class="form-results" id="formResults"></div>
+        </div>
+
+        <!-- Progress Tracker -->
+        <div id="progressTracker" class="progress-tracker">
+            <div class="progress-steps">
+                <div class="progress-step">
+                    <div class="step-indicator completed">1</div>
+                    <span>Information Gathering</span>
+                </div>
+                <div class="progress-step">
+                    <div class="step-indicator current">2</div>
+                    <span>Form Selection</span>
+                </div>
+                <div class="progress-step">
+                    <div class="step-indicator">3</div>
+                    <span>Review & Submit</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Container -->
+        <div class="chat-container" id="chatContainer">
+            <div class="message ai-message">
+                <div style="margin-bottom: 10px;">
+                    <strong>Tax Expert AI Assistant</strong>
+                    <div class="security-badge">
+                        <i class="fas fa-shield-alt"></i> End-to-End Encrypted
+                    </div>
+                </div>
+                Welcome! I'm your AI Tax Expert. I can help you with:
+                <ul>
+                    <li>Tax calculations and estimates</li>
+                    <li>Finding and completing tax forms</li>
+                    <li>Federal and state-specific guidance</li>
+                    <li>Understanding deductions and credits</li>
+                    <li>Step-by-step filing assistance</li>
+                </ul>
+                Please select your state and tax year above to get started.
+            </div>
+        </div>
+
+        <!-- Input Area -->
+        <div class="input-container">
+            <input type="text" id="questionInput" 
+                   placeholder="Ask your tax-related question..." 
+                   onkeypress="if(event.key === 'Enter') sendQuestion()">
+            <button class="send-button" onclick="sendQuestion()" id="sendButton">
+                <i class="fas fa-paper-plane"></i> Send
+            </button>
+        </div>
+
+        <!-- Disclaimer -->
+        <div class="disclaimer">
+            <i class="fas fa-info-circle"></i> This AI assistant provides general tax guidance. 
+            For specific tax advice, please consult with a qualified tax professional or the IRS directly.
+            All interactions are encrypted and handled securely.
+        </div>
+    </div>
+
+    <script>
+        // Global state
+        let currentState = {
+            state: '',
+            taxYear: '2024',
+            currentTab: 'chat',
+            processingStep: 1,
+            secureMode: true
+        };
+
+        // Tax forms database (sample)
+        const taxForms = [
+            { id: '1040', name: 'Form 1040', description: 'U.S. Individual Income Tax Return' },
+            { id: 'W2', name: 'Form W-2', description: 'Wage and Tax Statement' },
+            { id: '1099MISC', name: 'Form 1099-MISC', description: 'Miscellaneous Income' },
+            // Add more forms
+        ];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('questionInput').focus();
+        });
+
+        // Tab switching
+        function switchTab(tab) {
+            currentState.currentTab = tab;
+            
+            // Update tab UI
+            document.querySelectorAll('.nav-tab').forEach(t => 
+                t.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            // Hide all panels
+            document.getElementById('calculatorPanel').classList.remove('active');
+            document.getElementById('formSearchPanel').classList.remove('active');
+
+            // Show selected panel
+            if (tab === 'calculator') {
+                document.getElementById('calculatorPanel').classList.add('active');
+            } else if (tab === 'forms') {
+                document.getElementById('formSearchPanel').classList.add('active');
+            }
+        }
+
+        // State and tax year handling
+        function updateState() {
+            currentState.state = document.getElementById('stateSelector').value;
+            addMessage(`Switching to ${currentState.state} state tax guidance.`, false);
+        }
+
+        function updateTaxYear() {
+            currentState.taxYear = document.getElementById('taxYear').value;
+            addMessage(`Updating to tax year ${currentState.taxYear}.`, false);
+        }
+
+        // Tax calculator
+        function calculateTax() {
+            const income = parseFloat(document.getElementById('income').value);
+            const deductions = parseFloat(document.getElementById('deductions').value);
+
+            if (isNaN(income)) {
+                document.getElementById('calculatorResult').innerHTML = 
+                    '<div style="color: var(--error-color);">Please enter valid income amount.</div>';
+                return;
+            }
+
+            // Simple tax calculation (example)
+            const taxableIncome = income - (isNaN(deductions) ? 0 : deductions);
+            const estimatedTax = taxableIncome * 0.22; // Simplified tax rate
+
+            document.getElementById('calculatorResult').innerHTML = `
+                <div style="background: white; padding: 15px; border-radius: 8px; margin-top: 10px;">
+                    <h4>Tax Estimate for ${currentState.taxYear}</h4>
+                    <div>Taxable Income: $${taxableIncome.toFixed(2)}</div>
+                    <div>Estimated Tax: $${estimatedTax.toFixed(2)}</div>
+                    <div style="font-size: 12px; color: #666; margin-top: 10px;">
+                        Note: This is a simplified calculation. Actual tax may vary.
+                    </div>
+                </div>
+            `;
+        }
+
+        // Form search
+        function searchForms() {
+            const searchTerm = document.querySelector('.form-search-input').value.toLowerCase();
+            const results = taxForms.filter(form => 
+                form.name.toLowerCase().includes(searchTerm) || 
+                form.description.toLowerCase().includes(searchTerm)
+            );
+
+            document.getElementById('formResults').innerHTML = results.map(form => `
+                <div class="form-result-item" onclick="selectForm('${form.id}')">
+                    <strong>${form.name}</strong><br>
+                    ${form.description}
+                </div>
+            `).join('');
+        }
+
+        function selectForm(formId) {
+            addMessage(`Selected ${formId}. Would you like me to guide you through filling out this form?`, false);
+            switchTab('chat');
+        }
+
+        // Message handling
+        function addMessage(message, isUser) {
+            const chatContainer = document.getElementById('chatContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user-message' : 'ai-message'}`;
+            
+            if (isUser) {
+                // Mask sensitive data in user messages
+                message = maskSensitiveData(message);
+                messageDiv.textContent = message;
+            } else {
+                // Format AI responses
+                messageDiv.innerHTML = formatTaxResponse(message);
+            }
+            
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        // Security features
+        function maskSensitiveData(text) {
+            // Mask SSN
+            text = text.replace(/\b\d{3}-\d{2}-\d{4}\b/g, '***-**-****');
+            // Mask EIN
+            text = text.replace(/\b\d{2}-\d{7}\b/g, '**-*******');
+            return text;
+        }
+
+        function formatTaxResponse(text) {
+            // Format form references
+            text = text.replace(/\b(Form [0-9A-Z-]+)\b/g, 
+                '<span class="form-reference"><i class="fas fa-file-alt"></i>$1</span>');
+            
+            // Format step numbers
+            text = text.replace(/Step [0-9]+:/g, '<strong>$&</strong>');
+            
+            // Format security notices
+            text = text.replace(/\[SECURE\]/g, 
+                '<span class="security-badge"><i class="fas fa-shield-alt"></i>Secure</span>');
+            
+            return text;
+        }
+
+        // Question handling
+        async function sendQuestion() {
+            const input = document.getElementById('questionInput');
+            const question = input.value.trim();
+            
+            if (!question) return;
+            
+            // Add user message
+            addMessage(question, true);
+            input.value = '';
+            
+            // Simulate AI response
+            await simulateTyping();
+            
+            // Generate contextual response based on current state
+            const response = generateResponse(question);
+            addMessage(response, false);
+        }
+
+        function generateResponse(question) {
+            // This would be replaced with actual AI service integration
+            const stateContext = currentState.state ? `for ${currentState.state}` : '';
+            const yearContext = `tax year ${currentState.taxYear}`;
+            
+            return `Based on your question ${stateContext} for ${yearContext}, here's what you need to know...
+                   [Response would be generated by AI service with specific tax guidance]`;
+        }
+
+        async function simulateTyping() {
+            return new Promise(resolve => setTimeout(resolve, 1000));
+        }
+
+        // Initialize
+        document.getElementById('questionInput').focus();
+    </script>
+</body>
+</html>
