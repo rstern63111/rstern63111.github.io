@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tax Evader's Run</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #1a1a1a;
+            font-family: 'Arial', sans-serif;
+            color: white;
+        }
+        #gameCanvas {
+            background: linear-gradient(0deg, #1a1a1a 0%, #2c3e50 100%);
+            border: 2px solid #00D632;
+            box-shadow: 0 0 20px #00D632;
+        }
+        .game-container {
+            position: relative;
+        }
+        .hud {
+            position: absolute;
+            padding: 10px 20px;
+            background: rgba(0, 214, 50, 0.1);
+            border: 1px solid #00D632;
+            border-radius: 5px;
+        }
+        #score-container {
+            top: 10px;
+            left: 10px;
+            font-size: 18px;
+        }
+        #bonus-container {
+            top: 10px;
+            right: 10px;
+            text-align: right;
+        }
+        #multiplier {
+            color: #FFD700;
+            font-size: 24px;
+        }
+        #controls {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .title-screen {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #00D632;
+            display: none;
+        }
+        .title-screen h1 {
+            color: #00D632;
+            margin-bottom: 20px;
+        }
+        .start-button {
+            background: #00D632;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .start-button:hover {
+            background: #00ff3c;
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <canvas id="gameCanvas"></canvas>
+        <div class="hud" id="score-container">
+            <div>Recovered: $<span id="score">0</span></div>
+            <div>Tax Evaders Caught: <span id="evaders">0</span></div>
+        </div>
+        <div class="hud" id="bonus-container">
+            <div>Combo: <span id="multiplier">x1</span></div>
+            <div>Level: <span id="level">1</span></div>
+        </div>
+        <div id="controls">
+            [←/→] Move | [SPACE] Jump | [SHIFT] Dash | [Z] Special Ability
+        </div>
+        <div class="title-screen" id="titleScreen">
+            <h1>Tax Evader's Run</h1>
+            <p>Chase down tax evaders and recover lost revenue!</p>
+            <button class="start-button" onclick="startGame()">Start Investigation</button>
+        </div>
+    </div>
+
+    <script>
+        // ... (keeping core mechanics from previous version)
+
+        // New game-specific additions:
+        const THEME = {
+            PLAYER: '#00D632',  // IRS Agent green
+            ENEMY: '#ff4444',   // Tax evader red
+            PLATFORM: '#2c3e50', // Office building blue
+            COIN: '#FFD700',    // Gold for money
+            BACKGROUND: '#1a1a1a' // Dark city night
+        };
+
+        // Special ability types
+        const ABILITIES = {
+            AUDIT: 'audit',       // Temporarily freezes enemies
+            TAX_RETURN: 'return', // Extra jump
+            REFUND: 'refund'      // Health restore
+        };
+
+        // Particle system for visual effects
+        class ParticleSystem {
+            constructor() {
+                this.particles = [];
+            }
+
+            createMoneyEffect(x, y) {
+                for (let i = 0; i < 5; i++) {
+                    this.particles.push({
+                        x: x,
+                        y: y,
+                        vx: (Math.random() - 0.5) * 5,
+                        vy: -Math.random() * 5 - 3,
+                        life: 30,
+                        color: '#FFD700',
+                        text: '$'
+                    });
+                }
+            }
+
+            createAuditEffect(x, y) {
+                for (let i = 0; i < 8; i++) {
+                    this.particles.push({
+                        x: x,
+                        y: y,
+                        vx: Math.cos(i * Math.PI / 4) * 3,
+                        vy: Math.sin(i * Math.PI / 4) * 3,
+                        life: 40,
+                        color: '#00D632',
+                        text: '§'
+                    });
+                }
+            }
+
+            update() {
+                for (let i = this.particles.length - 1; i >= 0; i--) {
+                    const p = this.particles[i];
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vy += 0.2;  // Gravity
+                    p.life--;
+
+                    if (p.life <= 0) {
+                        this.particles.splice(i, 1);
+                    }
+                }
+            }
+
+            draw(ctx) {
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                this.particles.forEach(p => {
+                    ctx.fillStyle = p.color + Math.floor(p.life * 255 / 30).toString(16).padStart(2, '0');
+                    ctx.font = '16px Arial';
+                    ctx.fillText(p.text, p.x, p.y);
+                });
+            }
+        }
+
+        // Background city effect
+        class CityBackground {
+            constructor(canvas) {
+                this.buildings = [];
+                this.canvas = canvas;
+                this.generateBuildings();
+            }
+
+            generateBuildings() {
+                for (let x = 0; x < this.canvas.width; x += 40) {
+                    this.buildings.push({
+                        x: x,
+                        height: Math.random() * 200 + 100,
+                        width: 30,
+                        windows: []
+                    });
+                    
+                    // Generate windows
+                    const building = this.buildings[this.buildings.length - 1];
+                    for (let wy = 0; wy < building.height; wy += 30) {
+                        for (let wx = 0; wx < building.width; wx += 15) {
+                            if (Math.random() > 0.3) {
+                                building.windows.push({
+                                    x: wx,
+                                    y: wy,
+                                    lit: Math.random() > 0.5
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+
+            draw(ctx) {
+                // Draw sky gradient
+                const gradient = ctx.createLinearGradient(0, 0, 0, this.canvas.height);
+                gradient.addColorStop(0, '#0c1445');
+                gradient.addColorStop(1, '#1a1a1a');
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+                // Draw buildings
+                this.buildings.forEach(building => {
+                    ctx.fillStyle = '#1a1a1a';
+                    ctx.fillRect(
+                        building.x,
+                        this.canvas.height - building.height,
+                        building.width,
+                        building.height
+                    );
+
+                    // Draw windows
+                    building.windows.forEach(window => {
+                        ctx.fillStyle = window.lit ? 'rgba(255, 255, 190, 0.5)' : 'rgba(255, 255, 255, 0.1)';
+                        ctx.fillRect(
+                            building.x + window.x,
+                            this.canvas.height - building.height + window.y,
+                            10,
+                            15
+                        );
+                    });
+                });
+            }
+
+            // Randomly toggle window lights
+            updateWindows() {
+                this.buildings.forEach(building => {
+                    building.windows.forEach(window => {
+                        if (Math.random() < 0.001) {
+                            window.lit = !window.lit;
+                        }
+                    });
+                });
+            }
+        }
+
+        // Initialize new systems
+        const particles = new ParticleSystem();
+        const cityBackground = new CityBackground(canvas);
+
+        // Modify the draw function to include new visual effects
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw city background
+            cityBackground.draw(ctx);
+            cityBackground.updateWindows();
+
+            // Draw platforms with neon effect
+            platforms.forEach(platform => {
+                // Platform base
+                ctx.fillStyle = THEME.PLATFORM;
+                ctx.fillRect(platform.x, platform.y, platform.width, platform.height);
+                
+                // Neon edge
+                ctx.strokeStyle = '#00D632';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(platform.x, platform.y, platform.width, platform.height);
+            });
+
+            // Draw coins with glow effect
+            coins.forEach(coin => {
+                if (!coin.collected) {
+                    // Glow effect
+                    ctx.shadowColor = THEME.COIN;
+                    ctx.shadowBlur = 10;
+                    
+                    ctx.fillStyle = THEME.COIN;
+                    ctx.beginPath();
+                    ctx.arc(coin.x + coin.width/2, coin.y + coin.height/2, coin.width/2, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    ctx.shadowBlur = 0;
+                    
+                    ctx.fillStyle = '#000';
+                    ctx.font = '12px Arial';
+                    ctx.fillText('$', coin.x + 6, coin.y + 15);
+                }
+            });
+
+            // Draw enemy with effects
+            ctx.fillStyle = enemy.state === 'attack' ? '#FF0000' : 
+                          enemy.state === 'chase' ? '#FF4444' : '#FF8888';
+            
+            // Enemy shadow
+            ctx.shadowColor = 'red';
+            ctx.shadowBlur = 10;
+            ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
+            ctx.shadowBlur = 0;
+
+            // Draw player with effects
+            if (!player.invincible || Math.floor(Date.now() / 100) % 2) {
+                // Player glow
+                ctx.shadowColor = THEME.PLAYER;
+                ctx.shadowBlur = 10;
+                ctx.fillStyle = THEME.PLAYER;
+                ctx.fillRect(player.x, player.y, player.width, player.height);
+                ctx.shadowBlur = 0;
+                
+                // Player details
+                ctx.fillStyle = 'white';
+                if (player.facingRight) {
+                    ctx.fillRect(player.x + 19, player.y + 8, 4, 4);
+                    ctx.fillRect(player.x + 7, player.y + 8, 4, 4);
+                } else {
+                    ctx.fillRect(player.x + 7, player.y + 8, 4, 4);
+                    ctx.fillRect(player.x + 19, player.y + 8, 4, 4);
+                }
+                
+                // Badge
+                ctx.fillStyle = '#FFD700';
+                ctx.beginPath();
+                ctx.arc(player.x + player.width/2, player.y + 15, 5, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            // Update and draw particles
+            particles.update();
+            particles.draw(ctx);
+
+            // Draw dash cooldown
+            if (!player.canDash) {
+                ctx.fillStyle = 'rgba(0, 214, 50, 0.3)';
+                ctx.fillRect(10, canvas.height - 30, 50 * (player.dashCooldown / 45), 5);
+            }
+        }
+
+        // Show title screen initially
+        document.getElementById('titleScreen').style.display = 'block';
+
+        function startGame() {
+            document.getElementById('titleScreen').style.display = 'none';
+            gameLoop();
+        }
+
+        // Start the game loop only when player clicks start
+        document.getElementById('titleScreen').style.display = 'block';
+    </script>
+</body>
+</html>
