@@ -27,6 +27,7 @@
             background: rgba(0, 214, 50, 0.1);
             border: 1px solid #00D632;
             border-radius: 5px;
+            text-shadow: 0 0 10px #00D632;
         }
         #score-container {
             top: 10px;
@@ -37,10 +38,6 @@
             top: 10px;
             right: 10px;
             text-align: right;
-        }
-        #multiplier {
-            color: #FFD700;
-            font-size: 24px;
         }
         #controls {
             position: absolute;
@@ -63,11 +60,11 @@
             padding: 20px;
             border-radius: 10px;
             border: 2px solid #00D632;
-            display: none;
         }
         .title-screen h1 {
             color: #00D632;
             margin-bottom: 20px;
+            text-shadow: 0 0 10px #00D632;
         }
         .start-button {
             background: #00D632;
@@ -82,6 +79,7 @@
         .start-button:hover {
             background: #00ff3c;
             transform: scale(1.1);
+            box-shadow: 0 0 20px #00D632;
         }
     </style>
 </head>
@@ -90,14 +88,13 @@
         <canvas id="gameCanvas"></canvas>
         <div class="hud" id="score-container">
             <div>Recovered: $<span id="score">0</span></div>
-            <div>Tax Evaders Caught: <span id="evaders">0</span></div>
+            <div>Deductions: <span id="deduction-count">0</span></div>
         </div>
         <div class="hud" id="bonus-container">
-            <div>Combo: <span id="multiplier">x1</span></div>
             <div>Level: <span id="level">1</span></div>
         </div>
         <div id="controls">
-            [←/→] Move | [SPACE] Jump | [SHIFT] Dash | [Z] Special Ability
+            [←/→] Move | [SPACE] Jump | [SHIFT] Dash
         </div>
         <div class="title-screen" id="titleScreen">
             <h1>Tax Evader's Run</h1>
@@ -107,93 +104,35 @@
     </div>
 
     <script>
-        // ... (keeping core mechanics from previous version)
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = 800;
+        canvas.height = 400;
 
-        // New game-specific additions:
+        // Game state
+        let score = 0;
+        let deductions = 0;
+        let gameActive = false;
+
+        // Theme colors
         const THEME = {
-            PLAYER: '#00D632',  // IRS Agent green
-            ENEMY: '#ff4444',   // Tax evader red
-            PLATFORM: '#2c3e50', // Office building blue
-            COIN: '#FFD700',    // Gold for money
+            PLAYER: '#00D632',    // IRS Agent green
+            ENEMY: '#ff4444',     // Tax evader red
+            PLATFORM: '#2c3e50',  // Office building blue
+            COIN: '#FFD700',      // Gold for money
             BACKGROUND: '#1a1a1a' // Dark city night
         };
 
-        // Special ability types
-        const ABILITIES = {
-            AUDIT: 'audit',       // Temporarily freezes enemies
-            TAX_RETURN: 'return', // Extra jump
-            REFUND: 'refund'      // Health restore
-        };
-
-        // Particle system for visual effects
-        class ParticleSystem {
-            constructor() {
-                this.particles = [];
-            }
-
-            createMoneyEffect(x, y) {
-                for (let i = 0; i < 5; i++) {
-                    this.particles.push({
-                        x: x,
-                        y: y,
-                        vx: (Math.random() - 0.5) * 5,
-                        vy: -Math.random() * 5 - 3,
-                        life: 30,
-                        color: '#FFD700',
-                        text: '$'
-                    });
-                }
-            }
-
-            createAuditEffect(x, y) {
-                for (let i = 0; i < 8; i++) {
-                    this.particles.push({
-                        x: x,
-                        y: y,
-                        vx: Math.cos(i * Math.PI / 4) * 3,
-                        vy: Math.sin(i * Math.PI / 4) * 3,
-                        life: 40,
-                        color: '#00D632',
-                        text: '§'
-                    });
-                }
-            }
-
-            update() {
-                for (let i = this.particles.length - 1; i >= 0; i--) {
-                    const p = this.particles[i];
-                    p.x += p.vx;
-                    p.y += p.vy;
-                    p.vy += 0.2;  // Gravity
-                    p.life--;
-
-                    if (p.life <= 0) {
-                        this.particles.splice(i, 1);
-                    }
-                }
-            }
-
-            draw(ctx) {
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                this.particles.forEach(p => {
-                    ctx.fillStyle = p.color + Math.floor(p.life * 255 / 30).toString(16).padStart(2, '0');
-                    ctx.font = '16px Arial';
-                    ctx.fillText(p.text, p.x, p.y);
-                });
-            }
-        }
-
-        // Background city effect
+        // City background
         class CityBackground {
-            constructor(canvas) {
+            constructor() {
                 this.buildings = [];
-                this.canvas = canvas;
                 this.generateBuildings();
             }
 
             generateBuildings() {
-                for (let x = 0; x < this.canvas.width; x += 40) {
+                for (let x = 0; x < canvas.width; x += 40) {
                     this.buildings.push({
                         x: x,
                         height: Math.random() * 200 + 100,
@@ -219,18 +158,18 @@
 
             draw(ctx) {
                 // Draw sky gradient
-                const gradient = ctx.createLinearGradient(0, 0, 0, this.canvas.height);
+                const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
                 gradient.addColorStop(0, '#0c1445');
                 gradient.addColorStop(1, '#1a1a1a');
                 ctx.fillStyle = gradient;
-                ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
 
                 // Draw buildings
                 this.buildings.forEach(building => {
                     ctx.fillStyle = '#1a1a1a';
                     ctx.fillRect(
                         building.x,
-                        this.canvas.height - building.height,
+                        canvas.height - building.height,
                         building.width,
                         building.height
                     );
@@ -240,7 +179,7 @@
                         ctx.fillStyle = window.lit ? 'rgba(255, 255, 190, 0.5)' : 'rgba(255, 255, 255, 0.1)';
                         ctx.fillRect(
                             building.x + window.x,
-                            this.canvas.height - building.height + window.y,
+                            canvas.height - building.height + window.y,
                             10,
                             15
                         );
@@ -248,8 +187,7 @@
                 });
             }
 
-            // Randomly toggle window lights
-            updateWindows() {
+            update() {
                 this.buildings.forEach(building => {
                     building.windows.forEach(window => {
                         if (Math.random() < 0.001) {
@@ -260,42 +198,277 @@
             }
         }
 
-        // Initialize new systems
-        const particles = new ParticleSystem();
-        const cityBackground = new CityBackground(canvas);
+        // Player
+        const player = {
+            x: 50,
+            y: canvas.height - 50,
+            width: 30,
+            height: 40,
+            speed: 5,
+            velX: 0,
+            velY: 0,
+            jumping: false,
+            facingRight: true,
+            canDash: true,
+            dashCooldown: 0,
+            dashSpeed: 15,
+            dashDuration: 10,
+            invincible: false,
+            invincibleTime: 0
+        };
 
-        // Modify the draw function to include new visual effects
+        // Enemy
+        const enemy = {
+            x: 400,
+            y: canvas.height - 200,
+            width: 30,
+            height: 40,
+            speed: 2.5,
+            velX: 0,
+            velY: 0,
+            jumping: false,
+            facingRight: true,
+            state: 'patrol',
+            detectionRange: 120,
+            attackCooldown: 0,
+            attackRange: 40,
+            patrolPoint: 400,
+            patrolDistance: 100
+        };
+
+        // Platforms
+        const platforms = [
+            { type: 'normal', x: 0, y: canvas.height - 20, width: 200, height: 20 },
+            { type: 'normal', x: 300, y: canvas.height - 20, width: 200, height: 20 },
+            { type: 'normal', x: 600, y: canvas.height - 20, width: 200, height: 20 },
+            { type: 'normal', x: 150, y: canvas.height - 120, width: 150, height: 20 },
+            { type: 'normal', x: 400, y: canvas.height - 150, width: 150, height: 20 },
+            { type: 'normal', x: 650, y: canvas.height - 120, width: 100, height: 20 },
+            { type: 'normal', x: 100, y: canvas.height - 250, width: 100, height: 20 },
+            { type: 'normal', x: 300, y: canvas.height - 280, width: 100, height: 20 },
+            { type: 'normal', x: 500, y: canvas.height - 250, width: 100, height: 20 }
+        ];
+
+        // Coins
+        const coins = [
+            { x: 120, y: canvas.height - 290, width: 20, height: 20, collected: false },
+            { x: 320, y: canvas.height - 320, width: 20, height: 20, collected: false },
+            { x: 520, y: canvas.height - 290, width: 20, height: 20, collected: false },
+            { x: 200, y: canvas.height - 160, width: 20, height: 20, collected: false },
+            { x: 450, y: canvas.height - 190, width: 20, height: 20, collected: false },
+            { x: 670, y: canvas.height - 160, width: 20, height: 20, collected: false }
+        ];
+
+        // Initialize background
+        const cityBackground = new CityBackground();
+
+        // Controls
+        const keys = {};
+        document.addEventListener('keydown', (e) => {
+            keys[e.key] = true;
+            if ((e.key === 'ArrowUp' || e.key === 'w' || e.key === ' ') && !player.jumping) {
+                player.velY = -12;
+                player.jumping = true;
+            }
+            if (e.key === 'Shift' && player.canDash) {
+                performDash();
+            }
+        });
+        document.addEventListener('keyup', (e) => keys[e.key] = false);
+
+        function performDash() {
+            if (!player.canDash) return;
+            
+            player.canDash = false;
+            player.dashCooldown = 45;
+            player.invincible = true;
+            player.invincibleTime = player.dashDuration;
+            
+            const dashDir = (keys['ArrowLeft'] || keys['a']) ? -1 :
+                          (keys['ArrowRight'] || keys['d']) ? 1 :
+                          player.facingRight ? 1 : -1;
+            
+            player.velX = player.dashSpeed * dashDir;
+        }
+
+        function updatePlayer() {
+            if (!gameActive) return;
+
+            if (player.dashCooldown > 0) {
+                player.dashCooldown--;
+                if (player.dashCooldown <= 0) {
+                    player.canDash = true;
+                }
+            }
+
+            if (player.invincibleTime > 0) {
+                player.invincibleTime--;
+                if (player.invincibleTime <= 0) {
+                    player.invincible = false;
+                }
+            }
+
+            if (player.dashCooldown <= 0) {
+                player.velX = 0;
+                if (keys['ArrowLeft'] || keys['a']) {
+                    player.velX = -player.speed;
+                    player.facingRight = false;
+                }
+                if (keys['ArrowRight'] || keys['d']) {
+                    player.velX = player.speed;
+                    player.facingRight = true;
+                }
+            }
+
+            player.velY += 0.5;
+            player.x += player.velX;
+            player.y += player.velY;
+
+            // Platform collision
+            platforms.forEach(platform => {
+                if (player.x < platform.x + platform.width &&
+                    player.x + player.width > platform.x &&
+                    player.y + player.height > platform.y &&
+                    player.y < platform.y + platform.height) {
+                    if (player.velY > 0 && player.y + player.height - player.velY <= platform.y) {
+                        player.y = platform.y - player.height;
+                        player.velY = 0;
+                        player.jumping = false;
+                    }
+                }
+            });
+
+            // Coin collection
+            coins.forEach(coin => {
+                if (!coin.collected &&
+                    player.x < coin.x + coin.width &&
+                    player.x + player.width > coin.x &&
+                    player.y < coin.y + coin.height &&
+                    player.y + player.height > coin.y) {
+                    coin.collected = true;
+                    score += 100;
+                    deductions++;
+                    document.getElementById('score').textContent = score;
+                    document.getElementById('deduction-count').textContent = deductions;
+                }
+            });
+
+            // Enemy collision
+            if (!player.invincible &&
+                player.x < enemy.x + enemy.width &&
+                player.x + player.width > enemy.x &&
+                player.y < enemy.y + enemy.height &&
+                player.y + player.height > enemy.y) {
+                const pushDir = player.x < enemy.x ? -1 : 1;
+                player.velX = pushDir * 10;
+                player.velY = -8;
+                player.invincible = true;
+                player.invincibleTime = 60;
+                score -= 25;
+                document.getElementById('score').textContent = score;
+            }
+
+            // Screen boundaries
+            player.x = Math.max(0, Math.min(player.x, canvas.width - player.width));
+            
+            if (player.y > canvas.height) {
+                player.x = 50;
+                player.y = canvas.height - 50;
+                player.velY = 0;
+                player.velX = 0;
+                score -= 50;
+                document.getElementById('score').textContent = score;
+            }
+        }
+
+        function updateEnemy() {
+            if (!gameActive) return;
+
+            const dist = Math.sqrt(
+                Math.pow(player.x - enemy.x, 2) +
+                Math.pow(player.y - enemy.y, 2)
+            );
+
+            if (dist < enemy.attackRange && enemy.attackCooldown <= 0) {
+                enemy.state = 'attack';
+            } else if (dist < enemy.detectionRange) {
+                enemy.state = 'chase';
+            } else {
+                enemy.state = 'patrol';
+            }
+
+            switch(enemy.state) {
+                case 'patrol':
+                    enemy.velX = enemy.speed * (enemy.facingRight ? 1 : -1);
+                    if (Math.abs(enemy.x - enemy.patrolPoint) > enemy.patrolDistance) {
+                        enemy.facingRight = !enemy.facingRight;
+                    }
+                    break;
+
+                case 'chase':
+                    const directionX = player.x - enemy.x;
+                    enemy.facingRight = directionX > 0;
+                    enemy.velX = Math.sign(directionX) * enemy.speed;
+                    
+                    if (player.y < enemy.y - 50 && !enemy.jumping) {
+                        enemy.velY = -10;
+                        enemy.jumping = true;
+                    }
+                    break;
+
+                case 'attack':
+                    enemy.attackCooldown = 45;
+                    break;
+            }
+
+            enemy.velY += 0.5;
+            enemy.x += enemy.velX;
+            enemy.y += enemy.velY;
+
+            platforms.forEach(platform => {
+                if (enemy.x < platform.x + platform.width &&
+                    enemy.x + enemy.width > platform.x &&
+                    enemy.y + enemy.height > platform.y &&
+                    enemy.y < platform.y + platform.height) {
+                    if (enemy.velY > 0 && enemy.y + enemy.height - enemy.velY <= platform.y) {
+                        enemy.y = platform.y - enemy.height;
+                        enemy.velY = 0;
+                        enemy.jumping = false;
+                    }
+                }
+            });
+
+            enemy.x = Math.max(0, Math.min(enemy.x, canvas.width - enemy.width));
+
+            if (enemy.attackCooldown > 0) {
+                enemy.attackCooldown--;
+            }
+        }
+
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             // Draw city background
             cityBackground.draw(ctx);
-            cityBackground.updateWindows();
 
             // Draw platforms with neon effect
             platforms.forEach(platform => {
-                // Platform base
+                ctx.shadowColor = '#00D632';
+                ctx.shadowBlur = 10;
                 ctx.fillStyle = THEME.PLATFORM;
                 ctx.fillRect(platform.x, platform.y, platform.width, platform.height);
-                
-                // Neon edge
-                ctx.strokeStyle = '#00D632';
-                ctx.lineWidth = 2;
-                ctx.strokeRect(platform.x, platform.y, platform.width, platform.height);
+                ctx.shadowBlur = 0;
             });
 
-            // Draw coins with glow effect
+            // Draw coins with glow
             coins.forEach(coin => {
                 if (!coin.collected) {
-                    // Glow effect
                     ctx.shadowColor = THEME.COIN;
                     ctx.shadowBlur = 10;
-                    
                     ctx.fillStyle = THEME.COIN;
                     ctx.beginPath();
                     ctx.arc(coin.x + coin.width/2, coin.y + coin.height/2, coin.width/2, 0, Math.PI * 2);
                     ctx.fill();
-                    
                     ctx.shadowBlur = 0;
                     
                     ctx.fillStyle = '#000';
@@ -304,34 +477,21 @@
                 }
             });
 
-            // Draw enemy with effects
-            ctx.fillStyle = enemy.state === 'attack' ? '#FF0000' : 
-                          enemy.state === 'chase' ? '#FF4444' : '#FF8888';
-            
-            // Enemy shadow
+            // Draw enemy with glow
             ctx.shadowColor = 'red';
             ctx.shadowBlur = 10;
+            ctx.fillStyle = enemy.state === 'attack' ? '#FF0000' : 
+                          enemy.state === 'chase' ? '#FF4444' : '#FF8888';
             ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
             ctx.shadowBlur = 0;
 
             // Draw player with effects
             if (!player.invincible || Math.floor(Date.now() / 100) % 2) {
-                // Player glow
                 ctx.shadowColor = THEME.PLAYER;
                 ctx.shadowBlur = 10;
                 ctx.fillStyle = THEME.PLAYER;
                 ctx.fillRect(player.x, player.y, player.width, player.height);
                 ctx.shadowBlur = 0;
-                
-                // Player details
-                ctx.fillStyle = 'white';
-                if (player.facingRight) {
-                    ctx.fillRect(player.x + 19, player.y + 8, 4, 4);
-                    ctx.fillRect(player.x + 7, player.y + 8, 4, 4);
-                } else {
-                    ctx.fillRect(player.x + 7, player.y + 8, 4, 4);
-                    ctx.fillRect(player.x + 19, player.y + 8, 4, 4);
-                }
                 
                 // Badge
                 ctx.fillStyle = '#FFD700';
@@ -340,10 +500,6 @@
                 ctx.fill();
             }
 
-            // Update and draw particles
-            particles.update();
-            particles.draw(ctx);
-
             // Draw dash cooldown
             if (!player.canDash) {
                 ctx.fillStyle = 'rgba(0, 214, 50, 0.3)';
@@ -351,15 +507,21 @@
             }
         }
 
-        // Show title screen initially
-        document.getElementById('titleScreen').style.display = 'block';
+        function gameLoop() {
+            cityBackground.update();
+            updatePlayer();
+            updateEnemy();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
 
         function startGame() {
             document.getElementById('titleScreen').style.display = 'none';
+            gameActive = true;
             gameLoop();
         }
 
-        // Start the game loop only when player clicks start
+        // Show title screen initially
         document.getElementById('titleScreen').style.display = 'block';
     </script>
 </body>
