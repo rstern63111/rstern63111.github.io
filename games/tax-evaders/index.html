@@ -1,361 +1,61 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Tax Evader's Run</title>
+    <title>Tax Evader's Run - Debug Version</title>
     <style>
-        body {
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background: #1a1a1a;
-            font-family: Arial, sans-serif;
-        }
-        #gameCanvas {
-            background: #87CEEB;
+        canvas {
             border: 2px solid black;
-        }
-        .game-container {
-            position: relative;
-        }
-        .hud {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            color: white;
-            font-family: Arial, sans-serif;
-            font-size: 20px;
-            text-shadow: 2px 2px 2px black;
-        }
-        #deductions {
-            top: 40px;
-            left: 10px;
-            color: gold;
-        }
-        #controls {
-            position: absolute;
-            bottom: 10px;
-            left: 10px;
-            color: white;
-            font-size: 14px;
+            background: white;
         }
     </style>
 </head>
 <body>
-    <div class="game-container">
-        <canvas id="gameCanvas"></canvas>
-        <div class="hud">Score: <span id="score">0</span></div>
-        <div class="hud" id="deductions">Deductions: <span id="deduction-count">0</span></div>
-        <div id="controls">
-            Arrow Keys/WASD: Move | Space: Jump | Shift: Dash
-        </div>
-    </div>
+    <canvas id="gameCanvas" width="800" height="400"></canvas>
 
     <script>
-        // Wait for everything to load
-        window.onload = function() {
-            const canvas = document.getElementById('gameCanvas');
-            const ctx = canvas.getContext('2d');
-            
-            canvas.width = 800;
-            canvas.height = 400;
+        // Get canvas context
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
 
-            let score = 0;
-            let deductions = 0;
-
-            const player = {
-                x: 50,
-                y: canvas.height - 50,
-                width: 30,
-                height: 40,
-                speed: 5,
-                velX: 0,
-                velY: 0,
-                jumping: false,
-                facingRight: true,
-                canDash: true,
-                dashCooldown: 0,
-                dashSpeed: 15,
-                dashDuration: 10,
-                invincible: false,
-                invincibleTime: 0
-            };
-
-            const enemy = {
-                x: 320,
-                y: canvas.height - 140,
-                width: 30,
-                height: 40,
-                speed: 2.5,
-                velX: 0,
-                velY: 0,
-                jumping: false,
-                facingRight: true,
-                state: 'patrol',
-                detectionRange: 120,
-                attackCooldown: 0,
-                attackRange: 40,
-                patrolPoint: 320,
-                patrolDistance: 150
-            };
-
-            const platforms = [
-                { type: 'normal', x: 0, y: canvas.height - 20, width: canvas.width, height: 20 },
-                { type: 'normal', x: 300, y: canvas.height - 100, width: 200, height: 20 },
-                { type: 'normal', x: 100, y: canvas.height - 180, width: 200, height: 20 },
-                { type: 'normal', x: 500, y: canvas.height - 150, width: 150, height: 20 }
-            ];
-
-            const coins = [
-                { x: 350, y: canvas.height - 140, width: 20, height: 20, collected: false },
-                { x: 150, y: canvas.height - 220, width: 20, height: 20, collected: false },
-                { x: 550, y: canvas.height - 190, width: 20, height: 20, collected: false }
-            ];
-
-            const keys = {};
-            
-            document.addEventListener('keydown', (e) => {
-                keys[e.key] = true;
-                if ((e.key === 'ArrowUp' || e.key === 'w' || e.key === ' ') && !player.jumping) {
-                    player.velY = -12;
-                    player.jumping = true;
-                }
-                if (e.key === 'Shift' && player.canDash) {
-                    performDash();
-                }
-            });
-            
-            document.addEventListener('keyup', (e) => keys[e.key] = false);
-
-            function performDash() {
-                if (!player.canDash) return;
-                
-                player.canDash = false;
-                player.dashCooldown = 45;
-                player.invincible = true;
-                player.invincibleTime = player.dashDuration;
-                
-                const dashDir = (keys['ArrowLeft'] || keys['a']) ? -1 :
-                              (keys['ArrowRight'] || keys['d']) ? 1 :
-                              player.facingRight ? 1 : -1;
-                
-                player.velX = player.dashSpeed * dashDir;
-            }
-
-            function updatePlayer() {
-                if (player.dashCooldown > 0) {
-                    player.dashCooldown--;
-                    if (player.dashCooldown <= 0) {
-                        player.canDash = true;
-                    }
-                }
-
-                if (player.invincibleTime > 0) {
-                    player.invincibleTime--;
-                    if (player.invincibleTime <= 0) {
-                        player.invincible = false;
-                    }
-                }
-
-                if (player.dashCooldown <= 0) {
-                    player.velX = 0;
-                    if (keys['ArrowLeft'] || keys['a']) {
-                        player.velX = -player.speed;
-                        player.facingRight = false;
-                    }
-                    if (keys['ArrowRight'] || keys['d']) {
-                        player.velX = player.speed;
-                        player.facingRight = true;
-                    }
-                }
-
-                player.velY += 0.5;
-                player.x += player.velX;
-                player.y += player.velY;
-
-                platforms.forEach(platform => {
-                    if (player.x < platform.x + platform.width &&
-                        player.x + player.width > platform.x &&
-                        player.y + player.height > platform.y &&
-                        player.y < platform.y + platform.height) {
-                        if (player.velY > 0 && player.y + player.height - player.velY <= platform.y) {
-                            player.y = platform.y - player.height;
-                            player.velY = 0;
-                            player.jumping = false;
-                        }
-                    }
-                });
-
-                coins.forEach(coin => {
-                    if (!coin.collected &&
-                        player.x < coin.x + coin.width &&
-                        player.x + player.width > coin.x &&
-                        player.y < coin.y + coin.height &&
-                        player.y + player.height > coin.y) {
-                        coin.collected = true;
-                        score += 100;
-                        deductions++;
-                        document.getElementById('score').textContent = score;
-                        document.getElementById('deduction-count').textContent = deductions;
-                    }
-                });
-
-                if (!player.invincible &&
-                    player.x < enemy.x + enemy.width &&
-                    player.x + player.width > enemy.x &&
-                    player.y < enemy.y + enemy.height &&
-                    player.y + player.height > enemy.y) {
-                    const pushDir = player.x < enemy.x ? -1 : 1;
-                    player.velX = pushDir * 10;
-                    player.velY = -8;
-                    player.invincible = true;
-                    player.invincibleTime = 60;
-                    score -= 25;
-                    document.getElementById('score').textContent = score;
-                }
-
-                player.x = Math.max(0, Math.min(player.x, canvas.width - player.width));
-                
-                if (player.y > canvas.height) {
-                    player.x = 50;
-                    player.y = canvas.height - 50;
-                    player.velY = 0;
-                    player.velX = 0;
-                    score -= 50;
-                    document.getElementById('score').textContent = score;
-                }
-            }
-
-            function updateEnemy() {
-                const dist = Math.sqrt(
-                    Math.pow(player.x - enemy.x, 2) +
-                    Math.pow(player.y - enemy.y, 2)
-                );
-
-                if (dist < enemy.attackRange && enemy.attackCooldown <= 0) {
-                    enemy.state = 'attack';
-                } else if (dist < enemy.detectionRange) {
-                    enemy.state = 'chase';
-                } else {
-                    enemy.state = 'patrol';
-                }
-
-                switch(enemy.state) {
-                    case 'patrol':
-                        enemy.velX = enemy.speed * (enemy.facingRight ? 1 : -1);
-                        if (Math.abs(enemy.x - enemy.patrolPoint) > enemy.patrolDistance) {
-                            enemy.facingRight = !enemy.facingRight;
-                        }
-                        break;
-
-                    case 'chase':
-                        const directionX = player.x - enemy.x;
-                        enemy.facingRight = directionX > 0;
-                        enemy.velX = Math.sign(directionX) * enemy.speed;
-                        
-                        if (player.y < enemy.y - 50 && !enemy.jumping) {
-                            enemy.velY = -10;
-                            enemy.jumping = true;
-                        }
-                        break;
-
-                    case 'attack':
-                        enemy.attackCooldown = 45;
-                        break;
-                }
-
-                enemy.velY += 0.5;
-                enemy.x += enemy.velX;
-                enemy.y += enemy.velY;
-
-                platforms.forEach(platform => {
-                    if (enemy.x < platform.x + platform.width &&
-                        enemy.x + enemy.width > platform.x &&
-                        enemy.y + enemy.height > platform.y &&
-                        enemy.y < platform.y + platform.height) {
-                        if (enemy.velY > 0 && enemy.y + enemy.height - enemy.velY <= platform.y) {
-                            enemy.y = platform.y - enemy.height;
-                            enemy.velY = 0;
-                            enemy.jumping = false;
-                        }
-                    }
-                });
-
-                enemy.x = Math.max(0, Math.min(enemy.x, canvas.width - enemy.width));
-
-                if (enemy.attackCooldown > 0) {
-                    enemy.attackCooldown--;
-                }
-            }
-
-            function draw() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-                platforms.forEach(platform => {
-                    ctx.fillStyle = '#8B4513';
-                    ctx.fillRect(platform.x, platform.y, platform.width, platform.height);
-                });
-
-                coins.forEach(coin => {
-                    if (!coin.collected) {
-                        ctx.fillStyle = 'gold';
-                        ctx.beginPath();
-                        ctx.arc(coin.x + coin.width/2, coin.y + coin.height/2, coin.width/2, 0, Math.PI * 2);
-                        ctx.fill();
-                        ctx.fillStyle = 'black';
-                        ctx.font = '12px Arial';
-                        ctx.fillText('$', coin.x + 6, coin.y + 15);
-                    }
-                });
-
-                ctx.fillStyle = enemy.state === 'attack' ? '#FF0000' : 
-                              enemy.state === 'chase' ? '#FF4444' : '#FF8888';
-                ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
-                
-                if (enemy.facingRight) {
-                    ctx.fillStyle = 'white';
-                    ctx.fillRect(enemy.x + 19, enemy.y + 8, 4, 4);
-                    ctx.fillRect(enemy.x + 7, enemy.y + 8, 4, 4);
-                } else {
-                    ctx.fillStyle = 'white';
-                    ctx.fillRect(enemy.x + 7, enemy.y + 8, 4, 4);
-                    ctx.fillRect(enemy.x + 19, enemy.y + 8, 4, 4);
-                }
-
-                if (!player.invincible || Math.floor(Date.now() / 100) % 2) {
-                    ctx.fillStyle = '#00D632';
-                    ctx.fillRect(player.x, player.y, player.width, player.height);
-                    
-                    ctx.fillStyle = 'white';
-                    if (player.facingRight) {
-                        ctx.fillRect(player.x + 19, player.y + 8, 4, 4);
-                        ctx.fillRect(player.x + 7, player.y + 8, 4, 4);
-                    } else {
-                        ctx.fillRect(player.x + 7, player.y + 8, 4, 4);
-                        ctx.fillRect(player.x + 19, player.y + 8, 4, 4);
-                    }
-                    
-                    ctx.fillStyle = 'black';
-                    ctx.fillRect(player.x + player.width/2 - 1, player.y + 5, 2, 15);
-                }
-
-                if (!player.canDash) {
-                    ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
-                    ctx.fillRect(10, canvas.height - 30, 50 * (player.dashCooldown / 45), 5);
-                }
-            }
-
-            function gameLoop() {
-                updatePlayer();
-                updateEnemy();
-                draw();
-                requestAnimationFrame(gameLoop);
-            }
-
-            // Start the game
-            gameLoop();
+        // Player object
+        const player = {
+            x: 100,
+            y: 100,
+            width: 30,
+            height: 30,
+            speed: 5
         };
+
+        // Handle keyboard input
+        const keys = {};
+        document.addEventListener('keydown', e => keys[e.key] = true);
+        document.addEventListener('keyup', e => keys[e.key] = false);
+
+        // Game loop
+        function gameLoop() {
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Update player position
+            if (keys['ArrowLeft'] || keys['a']) player.x -= player.speed;
+            if (keys['ArrowRight'] || keys['d']) player.x += player.speed;
+            if (keys['ArrowUp'] || keys['w']) player.y -= player.speed;
+            if (keys['ArrowDown'] || keys['s']) player.y += player.speed;
+
+            // Keep player in bounds
+            player.x = Math.max(0, Math.min(canvas.width - player.width, player.x));
+            player.y = Math.max(0, Math.min(canvas.height - player.height, player.y));
+
+            // Draw player
+            ctx.fillStyle = 'green';
+            ctx.fillRect(player.x, player.y, player.width, player.height);
+
+            // Continue game loop
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Start the game
+        gameLoop();
     </script>
 </body>
 </html>
