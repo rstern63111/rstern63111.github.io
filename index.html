@@ -6,95 +6,881 @@
     <title>Rob Stern - Project Portfolio</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Keep all your existing styles */
-
-        /* Add cyberpunk theme styles */
-        .cyberpunk-theme {
-            background: linear-gradient(145deg, #1a1a1a 0%, #2c3e50 100%) !important;
-            border: 2px solid #00D632 !important;
-            color: white !important;
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --background-color: #f5f6fa;
+            --text-color: #2c3e50;
+            --card-background: white;
+            --section-padding: 2rem;
         }
 
-        .cyberpunk-theme .project-title {
-            color: #00D632 !important;
-            text-shadow: 0 0 10px rgba(0, 214, 50, 0.5);
+        body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            letter-spacing: -0.01em;
         }
 
-        .cyberpunk-theme .project-description {
-            color: #e0e0e0 !important;
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
         }
 
-        .cyberpunk-theme .project-tag {
-            background: rgba(0, 214, 50, 0.1) !important;
-            color: #00D632 !important;
-            border: 1px solid #00D632;
+        header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #1a4f88 100%);
+            color: white;
+            padding: 6rem 0 4rem;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
         }
 
-        .cyberpunk-theme .feature-list li {
-            color: #e0e0e0 !important;
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><rect width="1" height="1" fill="rgba(255,255,255,0.05)"/></svg>');
+            opacity: 0.3;
         }
 
-        .cyberpunk-theme .feature-list i {
-            color: #00D632 !important;
-            margin-right: 8px;
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
         }
 
-        .cyberpunk-theme .project-link {
-            color: #00D632 !important;
+        .header-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin: 0;
+            background: linear-gradient(90deg, #fff, #e0e0e0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.4rem;
+            margin-top: 1rem;
+            max-width: 600px;
+            line-height: 1.4;
+        }
+
+        .header-nav {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem 0;
+            background: rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .nav-brand {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-brand::before {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: var(--accent-primary);
+            border-radius: 50%;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--accent-primary);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+            transform-origin: right;
+        }
+
+        .nav-links a {
+            position: relative;
+        }
+
+        .nav-links a:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        /* Scroll Progress Bar */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+        }
+
+        .scroll-progress-bar {
+            height: 100%;
+            background: var(--accent-primary);
+            width: 0%;
+            transition: width 0.1s ease;
+        }
+
+        h1, h2, h3 {
+            margin: 0;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+            font-weight: 600;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: #ecf0f1;
+            font-size: 1.4rem;
+            margin-top: 0.5rem;
+            opacity: 0.9;
+        }
+
+        section {
+            margin-bottom: 4rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .profile-section {
+            background: var(--card-background);
+            border-radius: 16px;
+            padding: var(--section-padding);
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .profile-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .role-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 1.5rem 0;
+        }
+
+        .info-card {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid rgba(0,0,0,0.1);
             transition: all 0.3s ease;
         }
 
-        .cyberpunk-theme .project-link:hover {
-            text-shadow: 0 0 10px #00D632;
-            transform: translateX(5px);
+        .info-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border-color: var(--primary-color);
         }
 
-        .cyberpunk-theme .project-status.active {
-            background: rgba(0, 214, 50, 0.2);
-            color: #00D632;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 0.9em;
-            border: 1px solid #00D632;
+        .philosophy-section {
+            margin: 2rem 0;
+        }
+
+        .focus-areas {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .focus-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .focus-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border-color: var(--primary-color);
+        }
+
+        .focus-card i {
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .focus-card:hover i {
+            transform: scale(1.1);
+        }
+
+        .strengths-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            list-style: none;
+            padding: 0;
+        }
+
+        .strength-item {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .strength-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border-color: var(--primary-color);
+        }
+
+        .strength-item i {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .strength-item:hover i {
+            transform: scale(1.1);
+        }
+
+        .work-style-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 1.5rem 0;
+        }
+
+        .style-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .style-card h3 {
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 20px 0;
+        }
+
+        .project-card {
+            background: var(--card-background);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feedback-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        .feedback-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .feedback-card {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 2rem;
+            border-top: 1px solid #eee;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .role-info {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Previous content remains the same -->
-    <div class="ai-project-grid">
-        <!-- Previous project cards remain the same -->
-        
-        <!-- Updated Tax Evader's Run card -->
-        <div class="ai-project-card cyberpunk-theme">
-            <div class="project-content">
-                <h3 class="project-title">Tax Evader's Run</h3>
-                <div class="project-status active">Playable Demo</div>
-                <p class="project-description">
-                    A cyberpunk platformer where you play as an IRS Agent chasing down tax evaders through a neon-lit financial district. 
-                    Collect unpaid taxes while avoiding audit-resistant enemies!
-                </p>
-                <div class="project-tags">
-                    <span class="project-tag">Cyberpunk Game</span>
-                    <span class="project-tag">HTML5 Canvas</span>
-                    <span class="project-tag">Interactive</span>
-                </div>
-                <h4>Key Features:</h4>
-                <ul class="feature-list">
-                    <li><i class="fas fa-city"></i> Dynamic city background with animated windows</li>
-                    <li><i class="fas fa-lightbulb"></i> Neon visual effects and particle systems</li>
-                    <li><i class="fas fa-running"></i> Platformer mechanics with dash ability</li>
-                    <li><i class="fas fa-robot"></i> Enemy AI with patrol and chase behaviors</li>
-                </ul>
-                <div class="project-meta">
-                    <span class="project-date">June 2025</span>
-                    <a href="/games/tax-evaders/" class="project-link">
-                        Play Game <i class="fas fa-gamepad"></i>
-                    </a>
+    <div class="scroll-progress">
+        <div class="scroll-progress-bar"></div>
+    </div>
+    <header>
+        <nav class="header-nav">
+            <div class="nav-content">
+                <div class="nav-brand">Rob Stern</div>
+                <div class="nav-links">
+                    <a href="#about">About</a>
+                    <a href="#leadership">Leadership</a>
+                    <a href="#strengths">Strengths</a>
+                    <a href="#projects">AI Projects</a>
                 </div>
             </div>
+        </nav>
+        <div class="header-content">
+            <h1 class="header-title">Rob Stern</h1>
+            <div class="subtitle">Team Lead, Cash App Taxes – Tier 2 (CAT)</div>
         </div>
-        
-        <!-- Rest of the content remains the same -->
+    </header>
+
+    <div class="container">
+        <section class="profile-section">
+            <h2>Professional Profile</h2>
+            <div class="role-info">
+                <div class="info-card">
+                    <h3><i class="fas fa-building"></i> Company</h3>
+                    <p>Square (Block, Inc.)</p>
+                </div>
+                <div class="info-card">
+                    <h3><i class="fas fa-tasks"></i> Focus Areas</h3>
+                    <p>Tax Support Operations, Escalations, Process Management, Training & Development, Strategic Planning</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="philosophy-section">
+            <h2><i class="fas fa-compass"></i> Leadership Philosophy</h2>
+            <p>I lead with clarity, structure, and purpose. My goal is to build an environment where expectations are clear, growth is intentional, and operations run efficiently—with a constant focus on customer impact.</p>
+            <p>I balance strategic thinking with execution discipline. I believe in empowering team members through thoughtful training, process transparency, and measurable objectives. While I expect high standards, I offer support and coaching to help you meet them.</p>
+        </section>
+
+        <section class="focus-areas">
+            <div class="focus-card">
+                <i class="fas fa-bullseye"></i>
+                <h3>Clarity & Accountability</h3>
+                <p>Clear goals, role expectations, DRIs, and follow-through on commitments.</p>
+            </div>
+            <div class="focus-card">
+                <i class="fas fa-chart-line"></i>
+                <h3>Operational Excellence</h3>
+                <p>Refined processes, efficient tools, and well-maintained metrics dashboards.</p>
+            </div>
+            <div class="focus-card">
+                <i class="fas fa-users"></i>
+                <h3>Customer-Centricity</h3>
+                <p>Escalations, complaints, and cases should reflect empathy + accuracy.</p>
+            </div>
+            <div class="focus-card">
+                <i class="fas fa-graduation-cap"></i>
+                <h3>Team Growth</h3>
+                <p>Coaching, IDPs, training pathways, and structured performance feedback.</p>
+            </div>
+        </section>
+
+        <section class="profile-section">
+            <h2><i class="fas fa-key"></i> Key Strengths</h2>
+            <ul class="strengths-list">
+                <li class="strength-item">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <span>Designing and scaling structured training programs</span>
+                </li>
+                <li class="strength-item">
+                    <i class="fas fa-tasks"></i>
+                    <span>Streamlining complaints & escalation handling</span>
+                </li>
+                <li class="strength-item">
+                    <i class="fas fa-bullseye"></i>
+                    <span>Setting and driving OKRs tied to measurable business outcomes</span>
+                </li>
+                <li class="strength-item">
+                    <i class="fas fa-users"></i>
+                    <span>Coaching for growth while maintaining performance standards</span>
+                </li>
+                <li class="strength-item">
+                    <i class="fas fa-tools"></i>
+                    <span>Advocating for process/tooling improvements via feedback loops</span>
+                </li>
+                <li class="strength-item">
+                    <i class="fas fa-gamepad"></i>
+                    <span>Creating engagement through gamification and team culture rituals</span>
+                </li>
+            </ul>
+        </section>
+
+        <section class="profile-section">
+            <h2><i class="fas fa-brain"></i> Current Focus Areas</h2>
+            <ul class="strengths-list">
+                <li class="strength-item">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>Finalizing Tier 2 training on advanced tax topics (e.g., 1099-R, HSA)</span>
+                </li>
+                <li class="strength-item">
+                    <i class="fas fa-comments"></i>
+                    <span>Rolling out QuickText adoption + removing legacy Tax Responses</span>
+                </li>
+                <li class="strength-item">
+                    <i class="fas fa-route"></i>
+                    <span>Launching the MIAW system and refining case routing tooling</span>
+                </li>
+                <li class="strength-item">
+                    <i class="fas fa-gamepad"></i>
+                    <span>Building a digital escape room for tax training engagement</span>
+                </li>
+                <li class="strength-item">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Evolving QA metrics & dashboard clarity for better performance coaching</span>
+                </li>
+            </ul>
+        </section>
+
+        <section class="feedback-section">
+            <h2><i class="fas fa-comment"></i> Leadership Feedback Highlights</h2>
+            <div class="feedback-grid">
+                <div class="feedback-card">
+                    <p>"Clear, decisive, and empathetic leader"</p>
+                </div>
+                <div class="feedback-card">
+                    <p>"Strong planner with strategic visibility and execution follow-through"</p>
+                </div>
+                <div class="feedback-card">
+                    <p>"Builds a culture of respect, growth, and peer support"</p>
+                </div>
+                <div class="feedback-card">
+                    <p>"Welcomes feedback and uses it to iterate quickly"</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="ai-projects-section">
+            <h2><i class="fas fa-robot"></i> AI Creative Projects</h2>
+            <div class="ai-project-grid">
+                <div class="ai-project-card">
+                    <div class="project-image-container">
+                        <img src="images/ai-action-figures/Football Fanatic Ollie Action Figure.png" alt="AI Action Figure" class="project-image">
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">AI Action Figures</h3>
+                        <p class="project-description">A collection of custom AI-generated action figures, showcasing creative character design and packaging concepts.</p>
+                        <div class="project-tags">
+                            <span class="project-tag">AI Art</span>
+                            <span class="project-tag">Character Design</span>
+                            <span class="project-tag">Product Design</span>
+                        </div>
+                        <div class="project-meta">
+                            <span class="project-date">June 2025</span>
+                            <a href="/ai-action-figures.html" class="project-link">View Gallery <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ai-project-card">
+                    <div class="project-image-container">
+                        <img src="images/ai-stickers/Refund Rangers Tax Team Fun.png" alt="AI Team Stickers" class="project-image">
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">AI Team Stickers</h3>
+                        <p class="project-description">Custom AI-generated sticker designs celebrating team culture and achievements.</p>
+                        <div class="project-tags">
+                            <span class="project-tag">AI Art</span>
+                            <span class="project-tag">Team Culture</span>
+                            <span class="project-tag">Design</span>
+                        </div>
+                        <div class="project-meta">
+                            <span class="project-date">June 2025</span>
+                            <a href="/ai-stickers.html" class="project-link">View Gallery <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ai-project-card">
+                    <div class="project-content">
+                        <h3 class="project-title">2025 OKRs and Strategic Initiatives</h3>
+                        <div class="project-status">Active</div>
+                        <p class="project-description">AI-powered framework for Q3-Q4 2025 focusing on escalation quality improvement and operational excellence.</p>
+                        <div class="project-tags">
+                            <span class="project-tag">AI Strategy</span>
+                            <span class="project-tag">Process Automation</span>
+                            <span class="project-tag">Performance Analytics</span>
+                        </div>
+                        <h4>Key Components:</h4>
+                        <ul class="feature-list">
+                            <li>Strategic themes alignment</li>
+                            <li>Block by Block implementation</li>
+                            <li>Quarterly OKRs</li>
+                            <li>Progress tracking</li>
+                        </ul>
+                        <div class="project-meta">
+                            <span class="project-date">June 2025</span>
+                            <a href="/okrs.html" class="project-link">View OKRs <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ai-project-card">
+                    <div class="project-content">
+                        <h3 class="project-title">Tax Expert AI Widget</h3>
+                        <div class="project-status">In Development</div>
+                        <p class="project-description">An advanced interactive AI widget designed to revolutionize tax assistance and calculations.</p>
+                        <div class="project-tags">
+                            <span class="project-tag">AI Assistant</span>
+                            <span class="project-tag">Tax Tools</span>
+                            <span class="project-tag">Interactive UI</span>
+                        </div>
+                        <h4>Key Features:</h4>
+                        <ul class="feature-list">
+                            <li>Multi-tab interface (Chat, Calculator, Form Finder)</li>
+                            <li>State and tax year context management</li>
+                            <li>Security badges and data protection</li>
+                            <li>Progress tracking visualization</li>
+                        </ul>
+                        <div class="project-meta">
+                            <span class="project-date">June 2025</span>
+                            <a href="/tax-expert-widget.html" class="project-link">View Project <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ai-project-card">
+                    <div class="project-content">
+                        <h3 class="project-title">Tax Quest Game</h3>
+                        <div class="project-status">In Development</div>
+                        <p class="project-description">An AI-powered interactive game designed to make tax learning engaging and fun.</p>
+                        <div class="project-tags">
+                            <span class="project-tag">AI Gaming</span>
+                            <span class="project-tag">Training</span>
+                            <span class="project-tag">Gamification</span>
+                        </div>
+                        <h4>Key Features:</h4>
+                        <ul class="feature-list">
+                            <li>Character progression system</li>
+                            <li>Office management simulation</li>
+                            <li>Client management system</li>
+                            <li>Training and skill development</li>
+                        </ul>
+                        <div class="project-meta">
+                            <span class="project-date">June 2025</span>
+                            <a href="/game.html" class="project-link">Play Game <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
+
+    <footer>
+        <p>© 2025 Rob Stern. All rights reserved.</p>
+        <p style="margin-top: 0.5rem;">
+            <a href="/404.html" style="color: var(--secondary-color); text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;">
+                <i class="fas fa-cubes"></i> Check out my LEGO 404 Page
+            </a>
+        </p>
+    </footer>
+    <script>
+        // Scroll Progress Bar
+        const progressBar = document.querySelector('.scroll-progress-bar');
+        
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            progressBar.style.width = scrolled + '%';
+        });
+
+        // Smooth Scrolling for Navigation Links
+        document.querySelectorAll('.nav-links a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                
+                if (targetSection) {
+                    targetSection.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add section IDs for navigation
+        document.querySelector('.profile-section').id = 'about';
+        document.querySelector('.philosophy-section').id = 'leadership';
+        document.querySelector('.profile-section:nth-of-type(2)').id = 'strengths';
+        document.querySelector('.ai-projects-section').id = 'projects';
+    </script>
 </body>
-</html>
+</html><!-- Add this to your existing CSS in the style section -->
+<style>
+    .ai-projects-section {
+        margin: 2rem 0;
+    }
+
+    .ai-project-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin: 2rem 0;
+    }
+
+    .ai-project-card {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .ai-project-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .project-image-container {
+        position: relative;
+        width: 100%;
+        padding-top: 66.67%; /* 3:2 aspect ratio */
+        overflow: hidden;
+    }
+
+    .project-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .ai-project-card:hover .project-image {
+        transform: scale(1.05);
+    }
+
+    .project-content {
+        padding: 1.5rem;
+    }
+
+    .project-title {
+        font-size: 1.25rem;
+        color: var(--primary-color);
+        margin-bottom: 0.5rem;
+    }
+
+    .project-description {
+        color: var(--text-color);
+        margin-bottom: 1rem;
+    }
+
+    .project-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .project-tag {
+        background: var(--background-color);
+        color: var(--primary-color);
+        padding: 0.25rem 0.75rem;
+        border-radius: 15px;
+        font-size: 0.875rem;
+    }
+
+    .project-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 1rem;
+        border-top: 1px solid #eee;
+    }
+
+    .project-date {
+        font-size: 0.875rem;
+        color: #666;
+    }
+
+    .project-link {
+        color: var(--secondary-color);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .project-link:hover {
+        text-decoration: underline;
+    }
+
+    .gallery-section {
+        margin: 2rem 0;
+    }
+
+    .gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
+        margin: 1rem 0;
+    }
+
+    .gallery-item {
+        position: relative;
+        padding-top: 100%; /* 1:1 aspect ratio */
+        background: var(--background-color);
+        border-radius: 8px;
+        overflow: hidden;
+        cursor: pointer;
+    }
+
+    .gallery-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .gallery-item:hover .gallery-image {
+        transform: scale(1.05);
+    }
+
+    .gallery-caption {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 0.5rem;
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        font-size: 0.875rem;
+        transform: translateY(100%);
+        transition: transform 0.3s ease;
+    }
+
+    .gallery-item:hover .gallery-caption {
+        transform: translateY(0);
+    }
+
+    /* Modal styles for image preview */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.9);
+        z-index: 1000;
+        cursor: pointer;
+    }
+
+    .modal-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        max-width: 90%;
+        max-height: 90vh;
+    }
+
+    .modal-image {
+        max-width: 100%;
+        max-height: 90vh;
+        object-fit: contain;
+    }
+
+    .modal-caption {
+        position: absolute;
+        bottom: -2rem;
+        left: 0;
+        right: 0;
+        text-align: center;
+        color: white;
+        padding: 1rem;
+    }
+</style>
+
