@@ -1,23 +1,100 @@
-                <div class="ai-project-card">
-                    <div class="project-content">
-                        <h3 class="project-title">Tax Evader's Run</h3>
-                        <div class="project-status">Playable Demo</div>
-                        <p class="project-description">A cyberpunk platformer where you play as an IRS Agent chasing down tax evaders through a neon-lit financial district. Collect unpaid taxes while avoiding audit-resistant enemies!</p>
-                        <div class="project-tags">
-                            <span class="project-tag">Cyberpunk Game</span>
-                            <span class="project-tag">HTML5 Canvas</span>
-                            <span class="project-tag">Interactive</span>
-                        </div>
-                        <h4>Key Features:</h4>
-                        <ul class="feature-list">
-                            <li>Dynamic city background with animated windows</li>
-                            <li>Neon visual effects and particle systems</li>
-                            <li>Platformer mechanics with dash ability</li>
-                            <li>Enemy AI with patrol and chase behaviors</li>
-                        </ul>
-                        <div class="project-meta">
-                            <span class="project-date">June 2025</span>
-                            <a href="/games/tax-evaders/" class="project-link">Play Game <i class="fas fa-gamepad"></i></a>
-                        </div>
-                    </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rob Stern - Project Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Keep all your existing styles */
+
+        /* Add cyberpunk theme styles */
+        .cyberpunk-theme {
+            background: linear-gradient(145deg, #1a1a1a 0%, #2c3e50 100%) !important;
+            border: 2px solid #00D632 !important;
+            color: white !important;
+        }
+
+        .cyberpunk-theme .project-title {
+            color: #00D632 !important;
+            text-shadow: 0 0 10px rgba(0, 214, 50, 0.5);
+        }
+
+        .cyberpunk-theme .project-description {
+            color: #e0e0e0 !important;
+        }
+
+        .cyberpunk-theme .project-tag {
+            background: rgba(0, 214, 50, 0.1) !important;
+            color: #00D632 !important;
+            border: 1px solid #00D632;
+        }
+
+        .cyberpunk-theme .feature-list li {
+            color: #e0e0e0 !important;
+        }
+
+        .cyberpunk-theme .feature-list i {
+            color: #00D632 !important;
+            margin-right: 8px;
+        }
+
+        .cyberpunk-theme .project-link {
+            color: #00D632 !important;
+            transition: all 0.3s ease;
+        }
+
+        .cyberpunk-theme .project-link:hover {
+            text-shadow: 0 0 10px #00D632;
+            transform: translateX(5px);
+        }
+
+        .cyberpunk-theme .project-status.active {
+            background: rgba(0, 214, 50, 0.2);
+            color: #00D632;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            border: 1px solid #00D632;
+        }
+    </style>
+</head>
+<body>
+    <!-- Previous content remains the same -->
+    <div class="ai-project-grid">
+        <!-- Previous project cards remain the same -->
+        
+        <!-- Updated Tax Evader's Run card -->
+        <div class="ai-project-card cyberpunk-theme">
+            <div class="project-content">
+                <h3 class="project-title">Tax Evader's Run</h3>
+                <div class="project-status active">Playable Demo</div>
+                <p class="project-description">
+                    A cyberpunk platformer where you play as an IRS Agent chasing down tax evaders through a neon-lit financial district. 
+                    Collect unpaid taxes while avoiding audit-resistant enemies!
+                </p>
+                <div class="project-tags">
+                    <span class="project-tag">Cyberpunk Game</span>
+                    <span class="project-tag">HTML5 Canvas</span>
+                    <span class="project-tag">Interactive</span>
                 </div>
+                <h4>Key Features:</h4>
+                <ul class="feature-list">
+                    <li><i class="fas fa-city"></i> Dynamic city background with animated windows</li>
+                    <li><i class="fas fa-lightbulb"></i> Neon visual effects and particle systems</li>
+                    <li><i class="fas fa-running"></i> Platformer mechanics with dash ability</li>
+                    <li><i class="fas fa-robot"></i> Enemy AI with patrol and chase behaviors</li>
+                </ul>
+                <div class="project-meta">
+                    <span class="project-date">June 2025</span>
+                    <a href="/games/tax-evaders/" class="project-link">
+                        Play Game <i class="fas fa-gamepad"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Rest of the content remains the same -->
+    </div>
+</body>
+</html>
